@@ -4,6 +4,7 @@
 
   position: fixed;
   top: 100%;
+  left: 0px;
   z-index: 2;
 
   background-color: var(--content-color);
@@ -15,15 +16,27 @@
   h2 {
     color: var(--blue-color);
   }
+
+  @media (max-height: 670px) {
+    & {
+      height: 100vh;
+    }
+  }
 }
 
-header {
+.modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   padding: 6px 14px;
   border-bottom: 1px solid gray;
+
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+
+  background-color: var(--content-color);
 
   button {
     box-sizing: content-box;
@@ -47,10 +60,15 @@ header {
   }
 }
 
-form {
+.modalForm {
   margin: 0px auto;
-  padding: 0px 14px;
+  padding: 0px 14px 14px;
   max-width: 500px;
+
+  & > button {
+    display: block;
+    margin: 16px auto 0px;
+  }
 }
 
 .modalActiver {
