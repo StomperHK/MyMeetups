@@ -1,28 +1,84 @@
+import {useEffect, useRef} from 'react';
+
+import firestoreDatabase from '../firestore';
+import { collection, addDoc } from "firebase/firestore";
+
 import styleClasses from '../scss/MeetupCreatorModal.module.scss';
 import TextField from '@material-ui/core/TextField';
 // import {KeyboardTimePicker, KeyboardDatePicker} from '@material-ui/pickers';
 import {makeStyles} from '@material-ui/core/styles';
 
-function NewMeetup(props) {
-  const {modalState} = props
-  const {changeModalState} = props
+function MeetupCreatorModal(props) {
+  const {modalState, changeModalState, meetupsState, changeMeetupsState} = props
+
+  useEffect(() => {
+    const htmlEL = document.querySelector('html')
+
+    modalState ?
+    htmlEL.classList.add('overflow-hidden') :
+    htmlEL.classList.remove('overflow-hidden')
+  }, [modalState])
+
+  const urlInputRef = useRef()
+  const titleInputRef = useRef()
+  const descriptionInputRef = useRef()
+  const adressInputRef = useRef()
+  const hourInputRef = useRef()
+  const dateInputRef = useRef()
 
   const useStyles = makeStyles({
     root: {
       display: 'flex',
-      'margin-top': '16px',
-      'input': {
-        display: 'block'
-      },
+      'margin-top': '12px'
     }
   })
   const materialClasses = useStyles()
-''
+
+  function returnInputValue(element) {
+    if (element.classList.contains('MuiOutlinedInput-multiline')) {
+      return element.firstChild.value
+    }
+    else {
+      return element.children[1].firstChild.value
+    }
+  }
+
+  function formatDate(date) {
+    const [year, month, day] = date.split('-')
+    return [day, month, year].join('/')
+  }
+
+  function pushMeetupsData(meetupEntry) {
+    try {
+      addDoc(collection(firestoreDatabase, 'meetups'), meetupEntry)
+    }
+    catch (err) {
+      window.alert('Ocorreu um erro. Reinicie a página.')
+    }
+  }
+
+  function handleFormSubmit(event) {
+    event.preventDefault()
+    
+    const meetupEntry = {
+      image: returnInputValue(urlInputRef.current),
+      title: returnInputValue(titleInputRef.current),
+      description: returnInputValue(descriptionInputRef.current),
+      address: returnInputValue(adressInputRef.current),
+      hour: returnInputValue(hourInputRef.current),
+      date: formatDate(returnInputValue(dateInputRef.current))
+    }
+
+    meetupsState.push(meetupEntry)
+    changeMeetupsState(meetupsState)
+    pushMeetupsData(meetupEntry)
+  }
+
   return (
     <section
       className={`${styleClasses.modalContainer} ${modalState ? styleClasses.modalActiver : null}`}
     >
-      <header>
+      <header className={styleClasses.modalHeader}>
         <h2>
           Criar Encontro
         </h2>
@@ -31,34 +87,34 @@ function NewMeetup(props) {
         </button>
       </header>
 
-      <form>
+      <form className={styleClasses.modalForm} onSubmit={handleFormSubmit}>
         <TextField className={materialClasses.root} 
-          type="url" label="URL da imagem" 
+          type="url" label="URL da imagem" ref={urlInputRef}
         />
         <TextField className={materialClasses.root}
-          required type="text" label="Título" 
+          required type="text" label="Título" ref={titleInputRef}
         />
         <TextField className={materialClasses.root} 
-          required label="Descrição" multiline rows={4}
+          required label="Descrição" multiline rows={4} ref={descriptionInputRef}
           variant='outlined' 
         />
 
         <TextField className={materialClasses.root} 
-          required type="text" label="Local" 
+          required type="text" label="Endereço" ref={adressInputRef}
         />
         <TextField className={materialClasses.root} 
-          required type="time" label="Horário" format="hh/mm" 
+          required type="time" label="Horário" format="hh/mm" ref={hourInputRef}
           InputLabelProps={{shrink: true}} 
         />
         <TextField className={materialClasses.root}
-          required type="date" label="Data" format="dd/mm/yyyy"
+          required type="date" label="Data" format="dd/mm/yyyy" ref={dateInputRef}
           InputLabelProps={{shrink: true}} 
         />
 
-        <button type="submit">criar</button>
+        <button className="generic-button" type="submit">criar</button>
       </form>
     </section>
   )
 }
 
-export default NewMeetup;
+export default MeetupCreatorModal;
