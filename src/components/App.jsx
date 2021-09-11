@@ -2,7 +2,6 @@ import {Fragment, useState} from 'react';
 import {Route, Switch} from 'react-router-dom';
 
 import MainHeader from './MainHeader';
-import MeetupCreatorModal from './MeetupCreatorModal';
 import Meetups from '../pages/Meetups';
 import Bookmarks from '../pages/Bookmarks';
 
@@ -29,8 +28,6 @@ function App() {
           </Route>
         </Switch>
       </main>
-
-      <MeetupCreatorModal modalState={modalState} changeModalState={changeModalState} />
     </Fragment>
   )
 }
