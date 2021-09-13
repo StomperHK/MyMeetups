@@ -1,22 +1,26 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import styleClasses from '../scss/Card.module.scss'
 
 function Card(props) {
   const [imageState, changeImageState] = useState('empty')
-  const {cardIndex, titleName, imageSource, descriptionText, address, hour, date} = props
+  
+  const {titleName, imageSource, descriptionText, address, hour, date} = props
+
+  const imageRef = useRef()
 
   useEffect(defineImagesSizes, [])
 
   function defineImagesSizes() {
     try {
-      var imageEL = document.querySelectorAll('.card-image')[cardIndex]
+      const imageEL = imageRef.current
       imageEL.style.height = imageEL.clientWidth / (16 / 7) + 'px'
     }
     catch(err) {
       return
     }
   }
+  window.addEventListener('resize', defineImagesSizes)
 
   return (
     <article 
@@ -25,7 +29,7 @@ function Card(props) {
       <figure>
         {
           imageSource ? 
-          <img className='card-image' onLoad={() => changeImageState('loaded')} onError={() => changeImageState('error')} src={imageSource} alt="" /> :
+          <img className='card-image' ref={imageRef} onLoad={() => changeImageState('loaded')} onError={() => changeImageState('error')} src={imageSource} alt="" /> :
           null
         }
 
