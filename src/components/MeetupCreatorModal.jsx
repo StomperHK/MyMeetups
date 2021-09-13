@@ -9,15 +9,20 @@ import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 
 function MeetupCreatorModal(props) {
-  const {modalState, changeModalState, meetupsState, changeMeetupsState} = props
+  const {
+    changeFeedbackModalState,
+    meetupCreatorModalState,
+    changeMeetupCreatorModalState,
+    meetupsState, changeMeetupsState
+  } = props
 
   useEffect(() => {
     const htmlEL = document.querySelector('html')
 
-    modalState ?
+    meetupCreatorModalState ?
     htmlEL.classList.add('overflow-hidden') :
     htmlEL.classList.remove('overflow-hidden')
-  }, [modalState])
+  }, [meetupCreatorModalState])
 
   const urlInputRef = useRef()
   const titleInputRef = useRef()
@@ -32,6 +37,7 @@ function MeetupCreatorModal(props) {
       'margin-top': '12px'
     }
   })
+  
   const materialClasses = useStyles()
 
   function returnInputValue(element) {
@@ -51,9 +57,10 @@ function MeetupCreatorModal(props) {
   function pushMeetupsData(meetupEntry) {
     try {
       addDoc(collection(firestoreDatabase, 'meetups'), meetupEntry)
+      changeFeedbackModalState([true, 'encontro criado', 'normal'])
     }
-    catch (err) {
-      window.alert('Ocorreu um erro. Reinicie a página.')
+    catch (error) {
+      changeFeedbackModalState([true, 'erro ao enviar dados. reinicie a página', 'error'])
     }
   }
 
@@ -76,13 +83,13 @@ function MeetupCreatorModal(props) {
 
   return (
     <section
-      className={`${styleClasses.modalContainer} ${modalState ? styleClasses.modalActiver : null}`}
+      className={`${styleClasses.modalContainer} ${meetupCreatorModalState ? styleClasses.modalActiver : null}`}
     >
       <header className={styleClasses.modalHeader}>
         <h2>
           Criar Encontro
         </h2>
-        <button onClick={() => changeModalState(false)} aria-label="fechar janela de criação de encontro">
+        <button onClick={() => changeMeetupCreatorModalState(false)} aria-label="fechar janela de criação de encontro">
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
         </button>
       </header>
