@@ -1,7 +1,9 @@
-function Bookmarks(props) {
-  const {changeUnderlinedAnchor} = props
+import {useEffect} from 'react';
 
-  changeUnderlinedAnchor('second-anchor')
+function Bookmarks(props) {
+  const {changeAnchorToGetUnderlinedState} = props
+
+  useEffect(() =>changeAnchorToGetUnderlinedState('second-anchor'), [changeAnchorToGetUnderlinedState])
 
   return <h1>Bookmarks</h1>
 }
