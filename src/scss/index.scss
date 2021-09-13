@@ -24,7 +24,7 @@ body {
 }
 
 main {
-  padding: 20px 6.5vw 30px 6.5vw;
+  padding: 20px 4.5vw 65px 4.5vw;
 }
 
 button {
@@ -37,6 +37,11 @@ button {
       outline: none;
     }
   }
+}
+
+h1 {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .text-and-symbol-aligner {
@@ -73,8 +78,8 @@ button {
   }
 }
 
-
 /* JavaScript style classes */
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -82,7 +87,6 @@ button {
 .fit-content-height {
   height: fit-content;
 }
-
 
 @media (pointer: coarse) {
   *, button {
