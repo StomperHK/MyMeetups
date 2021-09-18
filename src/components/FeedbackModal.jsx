@@ -10,10 +10,11 @@ function FeedbackModal(props) {
   useEffect(() => {
     if (feedbackModalState[0]) {
       const modalOptions = feedbackModalState.slice(1)
+      const duration = feedbackModalState[3]
 
       clearTimeout(timeoutToCloseModal.current)
       timeoutToCloseModal.current = 
-        setTimeout(() => {changeFeedbackModalState([false, ...modalOptions])}, 1500)
+        setTimeout(() => {changeFeedbackModalState([false, ...modalOptions])}, duration)
     }
   }, [feedbackModalState, changeFeedbackModalState])
 
