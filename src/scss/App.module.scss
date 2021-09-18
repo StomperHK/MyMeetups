@@ -24,6 +24,23 @@
   }
 }
 
+.cardsGridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+
+  h2, p {
+    color: var(--blue-color);
+  }
+
+  @media screen and (max-width: 610px) {
+    & {
+      margin: 0px auto;
+      max-width: 410px;
+    }
+  }
+}
+
 .hideMeetupCreatorButton {
   opacity: 0;
 }
