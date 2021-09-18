@@ -1,15 +1,82 @@
 import {useState, useEffect, useRef} from 'react';
 
+import firestoreDatabase from '../firestore';
+import {updateDoc, deleteDoc, doc} from 'firebase/firestore';
+
 import styleClasses from '../scss/Card.module.scss'
 
 function Card(props) {
-  const [imageState, changeImageState] = useState('empty')
-  
-  const {titleName, imageSource, descriptionText, address, hour, date} = props
+  const {
+    cardIndex,
+    meetupsState,
+    changeMeetupsState,
+    changeFeedbackModalState,
+    confirmModalState,
+    changeConfirmModalState,
+    titleName,
+    imageSource,
+    descriptionText,
+    address,
+    hour,
+    date,
+    isBookmarked
+  } = props
 
+  const [imageState, changeImageState] = useState('empty')
+  const [bookmarkState, changeBookmarkState] = useState(isBookmarked)
+  
   const imageRef = useRef()
 
   useEffect(defineImagesSizes, [])
+  useEffect(deleteMeetup, [confirmModalState, meetupsState, deleteDatabaseData])
+
+  function updateFrontendOnDelete() {
+    let temporaryArray = meetupsState.slice()
+    temporaryArray.splice(cardIndex, 1)
+    changeMeetupsState(temporaryArray)
+  }
+
+  function deleteDatabaseData() {
+    deleteDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id))
+    .then(() => {
+      updateFrontendOnDelete()
+      changeFeedbackModalState([true, 'encontro removido', 'normal', 1500])
+    })
+    .catch(() => {
+      changeFeedbackModalState([true, 'erro ao deletar encontro: reinicie a página', 'error', 3000])
+    })
+  }
+
+  function deleteMeetup() {
+    const meetupMustGetDeleted = confirmModalState[1] === 'delete'
+    const thisIsTheMeetupThatMustGetDeleted = confirmModalState[2] === cardIndex
+
+    if (meetupMustGetDeleted && thisIsTheMeetupThatMustGetDeleted) {
+      changeConfirmModalState([false, ''])
+      deleteDatabaseData()
+    }
+  }
+
+  function callConfirmModal() {
+    changeConfirmModalState([true, '', cardIndex])
+  }
+
+  function updateFrontEndOnBookmark() {
+    meetupsState[cardIndex].isBookmarked = !bookmarkState
+    changeBookmarkState(!bookmarkState)
+    changeMeetupsState(meetupsState)
+  }
+
+  function toggleBookmarkMeetup() {
+    updateDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id), {isBookmarked: !bookmarkState})
+    .then(() => {
+      updateFrontEndOnBookmark()
+      changeFeedbackModalState([true, `encontro ${bookmarkState ? 'des' : ''}favoritado`, 'normal', 1500])
+    })
+    .catch(() => {
+      changeFeedbackModalState([true, 'erro ao favoritar encontro: reinicie a página', 'error', 3000])
+    })
+  }
 
   function defineImagesSizes() {
     try {
@@ -20,15 +87,16 @@ function Card(props) {
       return
     }
   }
+  
   window.addEventListener('resize', defineImagesSizes)
-
+  
   return (
     <article 
       className={`${styleClasses.card} ${'empty error'.includes(imageState) ? 'fit-content-height' : ''}`}
     >
       <figure>
         {
-          imageSource ? 
+          imageSource ?
           <img className='card-image' ref={imageRef} onLoad={() => changeImageState('loaded')} onError={() => changeImageState('error')} src={imageSource} alt="" /> :
           null
         }
@@ -36,7 +104,6 @@ function Card(props) {
         <figcaption>
           <h2>{titleName}</h2>
           {descriptionText ? <p>{descriptionText}</p> : null}
-
           <ul>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -55,14 +122,18 @@ function Card(props) {
       </figure>
 
       <div className={styleClasses.actionsWrapper}>
-        <button aria-label="excluir encontro">
+        <button onClick={callConfirmModal} aria-label="excluir encontro">
            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
         </button>
         <button className="generic-button">
           ver mais
         </button>
-        <button aria-label="favoritar encontro">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
+        <button onClick={toggleBookmarkMeetup} aria-label="favoritar encontro">
+          {
+            bookmarkState ?
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg> :
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
+          }
         </button>
       </div>
     </article>
