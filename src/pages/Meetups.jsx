@@ -1,20 +1,23 @@
 import {Fragment, useEffect} from 'react';
 
-import styleClasses from '../scss/Meetups.module.scss';
+import styleClasses from '../scss/App.module.scss';
 import Card from '../components/Card';
 import CreateMeetup from '../components/CreateMeetup';
 
 function Meetups(props) {
   const {
     meetupsState,
+    changeMeetupsState,
     dataIsLoading,
-    changeDataIsLoadingState,
     changeAnchorToGetUnderlinedState,
+    changeFeedbackModalState,
+    confirmModalState,
+    changeConfirmModalState,
     meetupCreatorModalState,
     changeMeetupCreatorModalState
   } = props
   
-  useEffect(() =>changeAnchorToGetUnderlinedState('first-anchor'), [changeAnchorToGetUnderlinedState])
+  useEffect(() => changeAnchorToGetUnderlinedState('first-anchor'), [changeAnchorToGetUnderlinedState])
 
   function returnCards()  {
     return (
@@ -23,12 +26,19 @@ function Meetups(props) {
           meetupsState.map((data, index) => {
             return (
               <Card
+                cardIndex={index}
+                meetupsState={meetupsState}
+                changeMeetupsState={changeMeetupsState}
+                changeFeedbackModalState={changeFeedbackModalState}
+                confirmModalState={confirmModalState}
+                changeConfirmModalState={changeConfirmModalState}
                 imageSource={data.image}
                 titleName={data.title}
                 descriptionText={data.description}
                 address={data.address}
                 hour={data.hour}
                 date={data.date}
+                isBookmarked={data.isBookmarked}
                 key={index}
               />
             )
