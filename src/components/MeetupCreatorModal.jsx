@@ -1,11 +1,10 @@
 import {useEffect, useRef} from 'react';
 
 import firestoreDatabase from '../firestore';
-import { collection, addDoc } from "firebase/firestore";
+import {collection, addDoc} from "firebase/firestore";
 
 import styleClasses from '../scss/MeetupCreatorModal.module.scss';
 import TextField from '@material-ui/core/TextField';
-// import {KeyboardTimePicker, KeyboardDatePicker} from '@material-ui/pickers';
 import {makeStyles} from '@material-ui/core/styles';
 
 function MeetupCreatorModal(props) {
@@ -54,14 +53,22 @@ function MeetupCreatorModal(props) {
     return [day, month, year].join('/')
   }
 
-  function pushMeetupsData(meetupEntry) {
-    try {
-      addDoc(collection(firestoreDatabase, 'meetups'), meetupEntry)
-      changeFeedbackModalState([true, 'encontro criado', 'normal'])
-    }
-    catch (error) {
-      changeFeedbackModalState([true, 'erro ao enviar dados. reinicie a página', 'error'])
-    }
+  function updateFrontEndDataOnPush(meetupEntry) {
+    meetupsState.unshift(meetupEntry)
+    changeMeetupsState(meetupsState)
+  }
+
+  function pushMeetupData(meetupEntry) {
+    addDoc(collection(firestoreDatabase, 'meetups'), meetupEntry)
+    .then(returnedData => {
+      meetupEntry.id = returnedData.id
+
+      updateFrontEndDataOnPush(meetupEntry)
+      changeFeedbackModalState([true, 'encontro criado', 'normal', 1500])
+    })
+    .catch(() => {
+      changeFeedbackModalState([true, 'erro ao enviar dados: reinicie a página', 'error', 3000])
+    })
   }
 
   function handleFormSubmit(event) {
@@ -73,12 +80,11 @@ function MeetupCreatorModal(props) {
       description: returnInputValue(descriptionInputRef.current),
       address: returnInputValue(adressInputRef.current),
       hour: returnInputValue(hourInputRef.current),
-      date: formatDate(returnInputValue(dateInputRef.current))
+      date: formatDate(returnInputValue(dateInputRef.current)),
+      isBookmarked: false
     }
 
-    meetupsState.push(meetupEntry)
-    changeMeetupsState(meetupsState)
-    pushMeetupsData(meetupEntry)
+    pushMeetupData(meetupEntry)
   }
 
   return (
