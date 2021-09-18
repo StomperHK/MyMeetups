@@ -7,11 +7,9 @@
 
   border-radius: 5px;
 
-  background-color: var(--content-color);
+  background-color: var(--content-color); 
 
   box-shadow: 4px 4px 12px var(--box-shadow-color);
-
-  cursor: pointer;
 
   img {
     display: block;
@@ -86,6 +84,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-top: 18px;
 
   button:not(:nth-child(2)) {
@@ -94,13 +93,63 @@
     width: 22px;
     height: 22px;
 
+    position: relative;
+
     border-radius: 50%;
 
     transition: background-color 64ms linear;
 
-    &:active {
-      background-color: var(--light-blue-color)
+    &:after {
+      display: block;
+      border: 1px solid var(--pink-color);
+      padding: 4px;
+
+      position: absolute;
+      bottom: 100%;
+
+      background: var(--content-color-with-high-opacity);
+
+      border-radius: 4px;
+
+      opacity: 0;
+
+      font-size: 14px;
+      color: var(--blue-color);
+
+      white-space: nowrap;
+
+      pointer-events: none;
+
+      transition: opacity 100ms linear;
     }
+
+    &:active {
+      background-color: var(--light-blue-color);
+    }
+
+    &:active::after {
+      opacity: 1;
+      transition-delay: 350ms;
+    }
+
+    @media (pointer: fine) {
+      &:hover::after {
+        opacity: 1;
+        transition-delay: 350ms;
+      }
+    }
+  }
+
+  button:nth-child(1)::after {
+    content: 'excluir';
+    left: 50%;
+    transform: translate(-30%, -4px);
+  }
+
+  button:nth-child(3)::after {
+    content: 'favoritar';
+    right: 50%;
+    transform: translate(30%, -4px);
   }
 
   svg {
