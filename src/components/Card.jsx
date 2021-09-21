@@ -13,6 +13,7 @@ function Card(props) {
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
+    changeMeetupViewerState,
     titleName,
     imageSource,
     descriptionText,
@@ -28,7 +29,8 @@ function Card(props) {
   const imageRef = useRef()
 
   useEffect(defineImagesSizes, [])
-  useEffect(deleteMeetup, [confirmModalState, meetupsState, deleteDatabaseData])
+  useEffect(deleteMeetup, [confirmModalState, cardIndex, changeConfirmModalState])
+  useEffect(verifyIfTheMeetupWasBookmakedByViewer, [meetupsState, bookmarkState, cardIndex, updateFrontEndOnBookmark])
 
   function updateFrontendOnDelete() {
     let temporaryArray = meetupsState.slice()
@@ -58,7 +60,18 @@ function Card(props) {
   }
 
   function callConfirmModal() {
-    changeConfirmModalState([true, '', cardIndex])
+    changeConfirmModalState([true, '', cardIndex, 'Quer mesmo excluir o encontro?', 'delete'])
+  }
+
+  function callMeeetupViewer() {
+    changeMeetupViewerState([true, cardIndex, callConfirmModal])
+  }
+
+  function verifyIfTheMeetupWasBookmakedByViewer() {
+    if (meetupsState[cardIndex].isBookmarked !== bookmarkState) {
+      meetupsState[cardIndex].isBookmarked = bookmarkState
+      toggleBookmarkMeetup()
+    }
   }
 
   function updateFrontEndOnBookmark() {
@@ -125,7 +138,7 @@ function Card(props) {
         <button onClick={callConfirmModal} aria-label="excluir encontro">
            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
         </button>
-        <button className="generic-button">
+        <button onClick={callMeeetupViewer} className="generic-button">
           ver mais
         </button>
         <button onClick={toggleBookmarkMeetup} aria-label="favoritar encontro">
