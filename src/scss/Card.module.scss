@@ -22,7 +22,7 @@
   }
 
   h2 {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -31,9 +31,10 @@
     -webkit-box-orient: vertical;
   }
 
-  p {
-    font-size: 15px;
+  figcaption > p {
+    margin-bottom: 10px;
 
+    font-size: 15px;
     word-break: break-word;
 
     overflow: hidden;
@@ -41,10 +42,6 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-  }
-
-  ul {
-    margin-top: 10px;
   }
 
   li {
@@ -55,8 +52,10 @@
   
     svg {
       flex-shrink: 0;
+
       width: 20px;
       height: 20px;
+      
       fill: var(--blue-color);
     }
     
@@ -99,9 +98,9 @@
 
     transition: background-color 64ms linear;
 
-    &:after {
+    &::after {   // Tooltip's Styles
       display: block;
-      border: 1px solid var(--pink-color);
+      border: 1px solid var(--blue-color);
       padding: 4px;
 
       position: absolute;
