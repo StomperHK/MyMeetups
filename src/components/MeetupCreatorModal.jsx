@@ -1,9 +1,8 @@
-import {useEffect, useRef} from 'react';
+import {useRef} from 'react';
 
 import firestoreDatabase from '../firestore';
 import {collection, addDoc} from "firebase/firestore";
 
-import styleClasses from '../scss/MeetupCreatorModal.module.scss';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -15,14 +14,6 @@ function MeetupCreatorModal(props) {
     meetupsState, changeMeetupsState
   } = props
 
-  useEffect(() => {
-    const htmlEL = document.querySelector('html')
-
-    meetupCreatorModalState ?
-    htmlEL.classList.add('overflow-hidden') :
-    htmlEL.classList.remove('overflow-hidden')
-  }, [meetupCreatorModalState])
-
   const urlInputRef = useRef()
   const titleInputRef = useRef()
   const descriptionInputRef = useRef()
@@ -32,21 +23,14 @@ function MeetupCreatorModal(props) {
 
   const useStyles = makeStyles({
     root: {
-      display: 'flex',
-      'margin-top': '12px'
+      'margin-top': '10px'
+    },
+    multiline: {
+      'margin-top': '18px'
     }
   })
   
   const materialClasses = useStyles()
-
-  function returnInputValue(element) {
-    if (element.classList.contains('MuiOutlinedInput-multiline')) {
-      return element.firstChild.value
-    }
-    else {
-      return element.children[1].firstChild.value
-    }
-  }
 
   function formatDate(date) {
     const [year, month, day] = date.split('-')
@@ -54,7 +38,7 @@ function MeetupCreatorModal(props) {
   }
 
   function updateFrontEndDataOnPush(meetupEntry) {
-    meetupsState.unshift(meetupEntry)
+    meetupsState.push(meetupEntry)
     changeMeetupsState(meetupsState)
   }
 
@@ -75,12 +59,12 @@ function MeetupCreatorModal(props) {
     event.preventDefault()
     
     const meetupEntry = {
-      image: returnInputValue(urlInputRef.current),
-      title: returnInputValue(titleInputRef.current),
-      description: returnInputValue(descriptionInputRef.current),
-      address: returnInputValue(adressInputRef.current),
-      hour: returnInputValue(hourInputRef.current),
-      date: formatDate(returnInputValue(dateInputRef.current)),
+      image: urlInputRef.current.value,
+      title: titleInputRef.current.value,
+      description: descriptionInputRef.current.value,
+      address: adressInputRef.current.value,
+      hour: hourInputRef.current.value,
+      date: formatDate(dateInputRef.current.value),
       isBookmarked: false
     }
 
@@ -89,9 +73,9 @@ function MeetupCreatorModal(props) {
 
   return (
     <section
-      className={`${styleClasses.modalContainer} ${meetupCreatorModalState ? styleClasses.modalActiver : null}`}
+      className={`modal-container ${meetupCreatorModalState ? 'modal-activer' : ''}`}
     >
-      <header className={styleClasses.modalHeader}>
+      <header className="modal-header">
         <h2>
           Criar Encontro
         </h2>
@@ -100,28 +84,31 @@ function MeetupCreatorModal(props) {
         </button>
       </header>
 
-      <form className={styleClasses.modalForm} onSubmit={handleFormSubmit}>
+      <form className="modal-form" onSubmit={handleFormSubmit}>
         <TextField className={materialClasses.root} 
-          type="url" label="URL da imagem" ref={urlInputRef}
+          type="url" label="URL da imagem" inputRef={urlInputRef}
+          fullWidth
         />
         <TextField className={materialClasses.root}
-          required type="text" label="Título" ref={titleInputRef}
+          required type="text" label="Título" inputRef={titleInputRef}
+          fullWidth
         />
-        <TextField className={materialClasses.root} 
-          required label="Descrição" multiline rows={4} ref={descriptionInputRef}
-          variant='outlined' 
+        <TextField className={materialClasses.multiline} 
+          label="Descrição" multiline rows={4} inputRef={descriptionInputRef}
+          variant='outlined' fullWidth
         />
 
         <TextField className={materialClasses.root} 
-          required type="text" label="Endereço" ref={adressInputRef}
+          required type="text" label="Endereço" inputRef={adressInputRef}
+          fullWidth
         />
         <TextField className={materialClasses.root} 
-          required type="time" label="Horário" format="hh/mm" ref={hourInputRef}
-          InputLabelProps={{shrink: true}} 
+          required type="time" label="Horário" format="hh/mm" inputRef={hourInputRef}
+          InputLabelProps={{shrink: true}} fullWidth
         />
         <TextField className={materialClasses.root}
-          required type="date" label="Data" format="dd/mm/yyyy" ref={dateInputRef}
-          InputLabelProps={{shrink: true}} 
+          required type="date" label="Data" format="dd/mm/yyyy" inputRef={dateInputRef}
+          InputLabelProps={{shrink: true}} fullWidth
         />
 
         <button className="generic-button" type="submit">criar</button>
