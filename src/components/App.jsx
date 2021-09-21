@@ -11,17 +11,28 @@ import Bookmarks from '../pages/Bookmarks';
 import LoadingScreen from './LoadingScreen';
 import ConfirmModal from './ConfirmModal';
 import FeedbackModal from './FeedbackModal';
+import MeetupViewer from './MeetupViewer';
 import MeetupCreatorModal from '../components/MeetupCreatorModal';
 
 function App() {
   const [anchorToGetUnderlinedState, changeAnchorToGetUnderlinedState] = useState('')
-  const [meetupsState, changeMeetupsState] = useState()
-  const [dataIsLoading, changeDataIsLoadingState] = useState(true)
-  const [confirmModalState, changeConfirmModalState] = useState([false, ''])
+  const [meetupsState, changeMeetupsState] = useState([])
+  const [dataIsLoading, changeDataIsLoadingState] = useState(true)  /* change it back to true */
+  const [confirmModalState, changeConfirmModalState] = useState([false, '', null, '', ''])
   const [feedbackModalState, changeFeedbackModalState] = useState([false, '_', 'normal'])
+  const [meetupViewerState, changeMeetupViewerState] = useState([false])
   const [meetupCreatorModalState, changeMeetupCreatorModalState] = useState(false)
 
-  useEffect(() => getMeetupsData(), [])
+  useEffect(toggleRemoveWindowScrollbar, [meetupCreatorModalState, meetupViewerState])
+  useEffect(getMeetupsData, [])
+  
+  function toggleRemoveWindowScrollbar() {
+    const htmlEL = document.querySelector('html')
+
+    meetupCreatorModalState || meetupViewerState[0] ?
+    htmlEL.classList.add('overflow-hidden') :
+    htmlEL.classList.remove('overflow-hidden')
+  }
   
   function getMeetupsData() {
     getDocs(collection(firestoreDatabase, "meetups"))
@@ -36,6 +47,7 @@ function App() {
       changeDataIsLoadingState(false)
     })
     .catch(() => {
+      changeDataIsLoadingState(false)
       changeFeedbackModalState([true, 'erro ao obter dados: reinicie a página', 'error', 3000])
     })
   }
@@ -60,6 +72,7 @@ function App() {
               confirmModalState={confirmModalState}
               changeConfirmModalState={changeConfirmModalState}
               meetupCreatorModalState={meetupCreatorModalState}
+              changeMeetupViewerState={changeMeetupViewerState}
               changeMeetupCreatorModalState={changeMeetupCreatorModalState}
             />
           </Route>
@@ -73,6 +86,7 @@ function App() {
               confirmModalState={confirmModalState}
               changeConfirmModalState={changeConfirmModalState}
               meetupCreatorModalState={meetupCreatorModalState}
+              changeMeetupViewerState={changeMeetupViewerState}
               changeMeetupCreatorModalState={changeMeetupCreatorModalState}
             />
           </Route>
@@ -96,6 +110,16 @@ function App() {
         <FeedbackModal
           feedbackModalState={feedbackModalState}
           changeFeedbackModalState={changeFeedbackModalState}
+        />
+
+        <MeetupViewer
+          meetupsState={meetupsState}
+          changeMeetupsState={changeMeetupsState}
+          changeFeedbackModalState={changeFeedbackModalState}
+          confirmModalState={confirmModalState}
+          changeConfirmModalState={changeConfirmModalState}
+          meetupViewerState={meetupViewerState}
+          changeMeetupViewerState={changeMeetupViewerState}
         />
  
         <MeetupCreatorModal
