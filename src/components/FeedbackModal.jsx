@@ -31,6 +31,7 @@ function FeedbackModal(props) {
       className={`
         ${styleClasses.modalContainer}
         ${getModalType() === 'error' ? styleClasses.modalErrorColor : ''}
+        ${getModalType() === 'alert' ? styleClasses.modalAlertColor : ''}
         ${getModalState() ? styleClasses.modalActiver : ''}
       `}
     >
