@@ -20,8 +20,9 @@
 
 .modalContainer {
   padding: 10px;
-  width: 40vw;
+  width: 90%;
   min-width: 250px;
+  max-width: 600px;
 
   background-color: var(--content-color);
 
@@ -33,6 +34,7 @@
     justify-content: space-between;
 
     border-bottom: 1px solid gray;
+    padding: 0px;
     padding-bottom: 4px;
 
     h2 {
@@ -41,24 +43,14 @@
     }
 
     button {
-      box-sizing: content-box;
       padding: 4px;
       width: 20px;
       height: 20px;
-  
-      border-radius: 50%;
-  
-      transition: background-color 64ms linear;
-  
-      &:active {
-        background-color: var(--light-blue-color)
-      }
     }
   
     svg {
       width: 20px;
       height: 20px;
-      fill: var(--blue-color);
     }
   }
 

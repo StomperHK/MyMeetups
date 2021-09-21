@@ -12,10 +12,13 @@
   z-index: 5;
 
   background-color: var(--content-color-with-small-opacity);
+
+  border-radius: 6px;
 }
 
 .loadingBarWrapper {
   width: 50px;
+  border-radius: 6px;
   overflow: hidden;
 
   span {
