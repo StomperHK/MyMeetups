@@ -14,11 +14,12 @@ function Meetups(props) {
     confirmModalState,
     changeConfirmModalState,
     meetupCreatorModalState,
+    changeMeetupViewerState,
     changeMeetupCreatorModalState
   } = props
   
   useEffect(() => changeAnchorToGetUnderlinedState('first-anchor'), [changeAnchorToGetUnderlinedState])
-
+  
   function returnCards()  {
     return (
       <div className={styleClasses.cardsGridContainer}>
@@ -32,6 +33,7 @@ function Meetups(props) {
                 changeFeedbackModalState={changeFeedbackModalState}
                 confirmModalState={confirmModalState}
                 changeConfirmModalState={changeConfirmModalState}
+                changeMeetupViewerState={changeMeetupViewerState}
                 imageSource={data.image}
                 titleName={data.title}
                 descriptionText={data.description}

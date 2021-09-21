@@ -14,6 +14,7 @@ function Bookmarks(props) {
     confirmModalState,
     changeConfirmModalState,
     meetupCreatorModalState,
+    changeMeetupViewerState,
     changeMeetupCreatorModalState
   } = props
 
@@ -37,6 +38,7 @@ function Bookmarks(props) {
                   changeFeedbackModalState={changeFeedbackModalState}
                   confirmModalState={confirmModalState}
                   changeConfirmModalState={changeConfirmModalState}
+                  changeMeetupViewerState={changeMeetupViewerState}
                   imageSource={data.image}
                   titleName={data.title}
                   descriptionText={data.description}
