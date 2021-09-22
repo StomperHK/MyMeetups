@@ -20,7 +20,7 @@ function MeetupViewer(props) {
     meetupViewerState,
     changeMeetupViewerState
   } = props
-  const [modalIsActivated, cardIndex, callConfirmModal] = meetupViewerState
+  const [modalIsActivated, cardIndex, callConfirmModal, toggleBookmarkMeetup] = meetupViewerState
 
   const [userIsEditingState, changeUserIsEditingState] = useState(false)
   const [viewerBookmarkState, changeViewerBookmarkState] = useState(false)
@@ -62,7 +62,6 @@ function MeetupViewer(props) {
   function verifyModalChange() {
     if (confirmModalState[1] === 'edit') {
       changeConfirmModalState([false, '', null, '', ''])
-      console.log(globalVerifiedChanges)
       updateDatabaseData()
     }
   }
@@ -70,7 +69,7 @@ function MeetupViewer(props) {
   function changeMeetupBookmark() {
     const meetupIsBookmarked = meetupsState[cardIndex].isBookmarked
     meetupsState[cardIndex].isBookmarked = !meetupIsBookmarked
-    changeMeetupsState(meetupsState)
+    toggleBookmarkMeetup()
     changeViewerBookmarkState(!viewerBookmarkState)
   }
 

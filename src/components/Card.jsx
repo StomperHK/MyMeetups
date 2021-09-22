@@ -30,7 +30,6 @@ function Card(props) {
 
   useEffect(defineImagesSizes, [])
   useEffect(deleteMeetup, [confirmModalState, cardIndex, changeConfirmModalState])
-  useEffect(verifyIfTheMeetupWasBookmakedByViewer, [meetupsState, bookmarkState, cardIndex, updateFrontEndOnBookmark])
 
   function updateFrontendOnDelete() {
     let temporaryArray = meetupsState.slice()
@@ -64,14 +63,7 @@ function Card(props) {
   }
 
   function callMeeetupViewer() {
-    changeMeetupViewerState([true, cardIndex, callConfirmModal])
-  }
-
-  function verifyIfTheMeetupWasBookmakedByViewer() {
-    if (meetupsState[cardIndex].isBookmarked !== bookmarkState) {
-      meetupsState[cardIndex].isBookmarked = bookmarkState
-      toggleBookmarkMeetup()
-    }
+    changeMeetupViewerState([true, cardIndex, callConfirmModal, toggleBookmarkMeetup])
   }
 
   function updateFrontEndOnBookmark() {
