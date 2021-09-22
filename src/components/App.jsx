@@ -17,7 +17,7 @@ import MeetupCreatorModal from '../components/MeetupCreatorModal';
 function App() {
   const [anchorToGetUnderlinedState, changeAnchorToGetUnderlinedState] = useState('')
   const [meetupsState, changeMeetupsState] = useState([])
-  const [dataIsLoading, changeDataIsLoadingState] = useState(true)  /* change it back to true */
+  const [dataIsLoading, changeDataIsLoadingState] = useState(true)  /* keep it true */
   const [confirmModalState, changeConfirmModalState] = useState([false, '', null, '', ''])
   const [feedbackModalState, changeFeedbackModalState] = useState([false, '_', 'normal'])
   const [meetupViewerState, changeMeetupViewerState] = useState([false])
