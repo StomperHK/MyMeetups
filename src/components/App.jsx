@@ -17,7 +17,7 @@ import MeetupCreatorModal from '../components/MeetupCreatorModal';
 function App() {
   const [anchorToGetUnderlinedState, changeAnchorToGetUnderlinedState] = useState('')
   const [meetupsState, changeMeetupsState] = useState([])
-  const [dataIsLoading, changeDataIsLoadingState] = useState(true)  /* keep it true */
+  const [dataIsLoading, changeDataIsLoadingState] = useState(true)  /* keep it truthy */
   const [confirmModalState, changeConfirmModalState] = useState([false, '', null, '', ''])
   const [feedbackModalState, changeFeedbackModalState] = useState([false, '_', 'normal'])
   const [meetupViewerState, changeMeetupViewerState] = useState([false])
@@ -79,15 +79,15 @@ function App() {
           
           <Route path="/bookmarks">
             <Bookmarks
+              anchorToGetUnderlinedState={anchorToGetUnderlinedState}
               meetupsState={meetupsState}
               changeMeetupsState={changeMeetupsState}
               dataIsLoading={dataIsLoading}
               changeAnchorToGetUnderlinedState={changeAnchorToGetUnderlinedState}
+              changeFeedbackModalState={changeFeedbackModalState}
               confirmModalState={confirmModalState}
               changeConfirmModalState={changeConfirmModalState}
-              meetupCreatorModalState={meetupCreatorModalState}
               changeMeetupViewerState={changeMeetupViewerState}
-              changeMeetupCreatorModalState={changeMeetupCreatorModalState}
             />
           </Route>
         </Switch>
@@ -113,6 +113,7 @@ function App() {
         />
 
         <MeetupViewer
+          anchorToGetUnderlinedState={anchorToGetUnderlinedState}
           meetupsState={meetupsState}
           changeMeetupsState={changeMeetupsState}
           changeFeedbackModalState={changeFeedbackModalState}
