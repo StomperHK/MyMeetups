@@ -15,7 +15,7 @@
 
   opacity: 1;
 
-  transition: opacity 100ms linear;
+  transition: opacity 150ms linear;
 }
 
 .modalContainer {
@@ -39,7 +39,6 @@
 
     h2 {
       font-size: 22px;
-      color: var(--blue-color);
     }
 
     button {
@@ -56,7 +55,6 @@
 
   p {
     padding-top: 12px;
-    color: var(--blue-color);
   }
 
   div {

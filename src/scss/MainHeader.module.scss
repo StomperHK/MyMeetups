@@ -3,24 +3,22 @@
   justify-content: space-between;
   align-items: center;
 
-  padding: 8px 16px;
+  padding: 8px 16px 22px;
 
-  background-color: var(--content-color);
+  background-color: var(--blue-color);
+  color: var(--content-color);
 
   p {
     font-size: 24px;
     font-weight: 600;
   }
 
-  p, a {
-    color: var(--blue-color);
-  } 
-
   a {
     padding: 6px 0px;
 
     position: relative;
 
+    color: var(--content-color);
     text-decoration: none;
     font-size: 17px;
     font-variant: small-caps;
@@ -47,7 +45,7 @@
     height: 2px;
     width: 0px;
 
-    background-color: var(--blue-color);
+    background-color: var(--content-color);
 
     position: absolute;
     left: 50%;
@@ -58,8 +56,6 @@
   }
 
   a:hover, a:active {
-    color: var(--dark-blue-color);
-
     &::after {width: 100%}
   }
 
