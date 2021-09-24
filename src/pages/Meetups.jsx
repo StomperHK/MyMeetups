@@ -19,33 +19,30 @@ function Meetups(props) {
   } = props
   
   useEffect(() => changeAnchorToGetUnderlinedState('first-anchor'), [changeAnchorToGetUnderlinedState])
-  
+
   function returnCards()  {
     return (
-      <div className={styleClasses.cardsGridContainer}>
-        {
-          meetupsState.map((data, index) => {
-            return (
-              <Card
-                cardIndex={index}
-                meetupsState={meetupsState}
-                changeMeetupsState={changeMeetupsState}
-                changeFeedbackModalState={changeFeedbackModalState}
-                confirmModalState={confirmModalState}
-                changeConfirmModalState={changeConfirmModalState}
-                changeMeetupViewerState={changeMeetupViewerState}
-                imageSource={data.image}
-                titleName={data.title}
-                descriptionText={data.description}
-                address={data.address}
-                hour={data.hour}
-                date={data.date}
-                isBookmarked={data.isBookmarked}
-                key={index}
-              />
-            )
-          })
-        }
+      <div className={styleClasses.gridContainer}>
+        {meetupsState.map((data, index) => {
+          return (
+            <Card
+              cardIndex={index}
+              meetupsState={meetupsState}
+              changeMeetupsState={changeMeetupsState}
+              changeFeedbackModalState={changeFeedbackModalState}
+              confirmModalState={confirmModalState}
+              changeConfirmModalState={changeConfirmModalState}
+              changeMeetupViewerState={changeMeetupViewerState}
+              imageSource={data.image}
+              titleName={data.title}
+              address={data.address}
+              hour={data.hour}
+              date={data.date}
+              isBookmarked={data.isBookmarked}
+              key={index}
+            />
+          )
+        })}
       </div>
     )
   }
@@ -56,7 +53,10 @@ function Meetups(props) {
 
   return (
     <Fragment>
-      <h1>Encontros</h1>
+      <div className={`introduction-wrapper ${!meetupsState.length ? 'reduce-padding' : ''}`}>
+        <h1>Encontros</h1>
+        <p>{meetupsState.length} encontro{meetupsState.length === 1 ? '' : 's'}</p>
+      </div>
 
       {!dataIsLoading ? createCards() : null}
     </Fragment>

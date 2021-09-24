@@ -2,7 +2,7 @@ import {Fragment, useEffect} from 'react';
 
 import styleClasses from '../scss/App.module.scss';
 import Card from '../components/Card';
-import CreateMeetup from '../components/CreateMeetup';
+import ReturnToMeetups from '../components/ReturnToMeetups';
 
 function Bookmarks(props) {
   const {
@@ -13,22 +13,25 @@ function Bookmarks(props) {
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
-    meetupCreatorModalState,
     changeMeetupViewerState,
-    changeMeetupCreatorModalState
   } = props
 
   useEffect(() =>changeAnchorToGetUnderlinedState('second-anchor'), [changeAnchorToGetUnderlinedState])
+
+  const bookmarkedMeetups = knowAmountOfBookmarkedMeetups()
 
   function knowIfAnyMeetupIsBookmarked() {
     return meetupsState.some(meetup => meetup.isBookmarked)
   }
 
+  function knowAmountOfBookmarkedMeetups() {
+    return meetupsState.reduce((accum, meetup) => meetup.isBookmarked ? accum + 1 : accum, 0)
+  }
+
   function returnCards()  {
     return (
-      <div className={styleClasses.cardsGridContainer}>
-        {
-          meetupsState.reduce((accum, data, index) => {
+      <div className={styleClasses.gridContainer}>
+        {meetupsState.reduce((accum, data, index) => {
             if (data.isBookmarked) {
               accum.push(
                 <Card
@@ -41,7 +44,6 @@ function Bookmarks(props) {
                   changeMeetupViewerState={changeMeetupViewerState}
                   imageSource={data.image}
                   titleName={data.title}
-                  descriptionText={data.description}
                   address={data.address}
                   hour={data.hour}
                   date={data.date}
@@ -52,19 +54,21 @@ function Bookmarks(props) {
             }
             
             return accum
-          }, [])
-        }
+          }, [])}
       </div>
     )
   }
 
   function createCards() {
-    return knowIfAnyMeetupIsBookmarked() ? returnCards() : <CreateMeetup meetupCreatorModalState={meetupCreatorModalState} changeMeetupCreatorModalState={changeMeetupCreatorModalState} />
+    return knowIfAnyMeetupIsBookmarked() ? returnCards() : <ReturnToMeetups />
   }
 
   return (
     <Fragment>
-      <h1>Favoritos</h1>
+      <div className={`introduction-wrapper ${!bookmarkedMeetups ? 'reduce-padding' : ''}`}>
+        <h1>Favoritos</h1>
+        <p>{bookmarkedMeetups} favorito{bookmarkedMeetups === 1 ? '' : 's'}</p>
+      </div>
 
       {!dataIsLoading && meetupsState ? createCards() : null}
     </Fragment>
