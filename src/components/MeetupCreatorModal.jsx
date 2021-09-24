@@ -74,6 +74,7 @@ function MeetupCreatorModal(props) {
   return (
     <section
       className={`modal-container ${meetupCreatorModalState ? 'modal-activer' : ''}`}
+      aria-hidden={!meetupCreatorModalState ? 'true' : 'undefined'}
     >
       <header className="modal-header">
         <h2>
@@ -111,7 +112,10 @@ function MeetupCreatorModal(props) {
           InputLabelProps={{shrink: true}} fullWidth
         />
 
-        <button className="generic-button" type="submit">criar</button>
+        <div className="action-buttons-wrapper">
+          <button className="generic-button" type="reset">resetar</button>
+          <button className="generic-button" type="submit">criar</button>
+        </div>
       </form>
     </section>
   )
