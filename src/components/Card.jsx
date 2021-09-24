@@ -16,14 +16,12 @@ function Card(props) {
     changeMeetupViewerState,
     titleName,
     imageSource,
-    descriptionText,
     address,
     hour,
     date,
     isBookmarked
   } = props
-
-  const [imageState, changeImageState] = useState('empty')
+  
   const [bookmarkState, changeBookmarkState] = useState(isBookmarked)
   
   const imageRef = useRef()
@@ -41,6 +39,7 @@ function Card(props) {
     deleteDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id))
     .then(() => {
       updateFrontendOnDelete()
+      changeMeetupViewerState([false])
       changeFeedbackModalState([true, 'encontro removido', 'normal', 1500])
     })
     .catch(() => {
@@ -53,7 +52,7 @@ function Card(props) {
     const thisIsTheMeetupThatMustGetDeleted = confirmModalState[2] === cardIndex
 
     if (meetupMustGetDeleted && thisIsTheMeetupThatMustGetDeleted) {
-      changeConfirmModalState([false, ''])
+      changeConfirmModalState([false, '', null, confirmModalState[3], ''])
       deleteDatabaseData()
     }
   }
@@ -86,7 +85,7 @@ function Card(props) {
   function defineImagesSizes() {
     try {
       const imageEL = imageRef.current
-      imageEL.style.height = imageEL.clientWidth / (16 / 7) + 'px'
+      imageEL.style.height = imageEL.clientWidth / (16 / 6) + 'px'
     }
     catch(err) {
       return
@@ -96,19 +95,18 @@ function Card(props) {
   window.addEventListener('resize', defineImagesSizes)
   
   return (
-    <article 
-      className={`${styleClasses.card} ${'empty error'.includes(imageState) ? 'fit-content-height' : ''}`}
-    >
+    <article className={styleClasses.card}>
       <figure>
         {
           imageSource ?
-          <img className='card-image' ref={imageRef} onLoad={() => changeImageState('loaded')} onError={() => changeImageState('error')} src={imageSource} alt="" /> :
-          null
+          <img className='card-image' ref={imageRef} src={imageSource} alt="" /> :
+          <div className={styleClasses.imageRepresentationWrapper} ref={imageRef}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
         }
 
         <figcaption>
           <h2>{titleName}</h2>
-          {descriptionText ? <p>{descriptionText}</p> : null}
           <ul>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>
