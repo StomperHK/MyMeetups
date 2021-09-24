@@ -1,15 +1,12 @@
 .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
+  border: 2px solid var(--blue-color);
   padding: 8px;
 
   border-radius: 5px;
 
   background-color: var(--content-color); 
 
-  box-shadow: 4px 4px 12px var(--box-shadow-color);
+  box-shadow: 1px 3px 8px var(--box-shadow-color);
 
   img {
     display: block;
@@ -22,25 +19,16 @@
   }
 
   h2 {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    font-size: 22px;
+  }
 
+  h2, p {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-  }
-
-  figcaption > p {
-    margin-bottom: 10px;
-
-    font-size: 15px;
-    word-break: break-word;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
   }
 
@@ -67,15 +55,21 @@
   li + li {
     margin-top: 6px;
   }
+}
 
-  @media (pointer: fine) {
-    & {
-      transition: transform 80ms ease;
-    }
+.imageRepresentationWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  margin-bottom: 6px;
+  border: 3px solid var(--blue-color);
+  border-radius: 4px;
 
-    &:hover {
-      transform: translateY(-5px);
-    }
+  svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--blue-color)
   }
 }
 
@@ -113,7 +107,6 @@
       opacity: 0;
 
       font-size: 14px;
-      color: var(--blue-color);
 
       white-space: nowrap;
 
