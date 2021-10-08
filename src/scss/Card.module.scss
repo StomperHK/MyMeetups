@@ -13,13 +13,15 @@
     margin-bottom: 6px;
     width: 100%;
 
+    background-color: rgba(255, 240, 240, 60%);
+
     border-radius: 4px 4px 0px 0px;
 
     object-fit: cover;
   }
 
   h2 {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     font-size: 22px;
   }
 
@@ -28,7 +30,6 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 1;
-    line-clamp: 1;
     -webkit-box-orient: vertical;
   }
 
@@ -48,7 +49,7 @@
     }
     
     p {
-      font-size: 14px;
+      font-size: 15px;
     }
   }
 
@@ -78,7 +79,7 @@
   align-items: center;
   justify-content: space-between;
 
-  margin-top: 18px;
+  margin-top: 14px;
 
   button:not(:nth-child(2)) {
     box-sizing: content-box;
@@ -90,7 +91,7 @@
 
     border-radius: 50%;
 
-    transition: background-color 64ms linear;
+    transition: background-color 80ms linear;
 
     &::after {   // Tooltip's Styles
       display: block;
@@ -116,7 +117,7 @@
     }
 
     &:active {
-      background-color: var(--light-blue-color);
+      background-color: var(--blue-color-with-small-opacity);
     }
 
     &:active::after {
