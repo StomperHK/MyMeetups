@@ -1,7 +1,18 @@
+import Button from '@mui/material/Button';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
 import styleClasses from '../scss/ConfirmModal.module.scss';
 
 function ConfirmModal(props) {
   const {confirmModalState, changeConfirmModalState} = props
+
+  const normalTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#525ee2',
+      }
+    }
+  })
 
   function handleUserConfirm() {
     const cardIndex = confirmModalState[2]
@@ -26,8 +37,18 @@ function ConfirmModal(props) {
         </p>
 
         <div>
-          <button onClick={handleUserConfirm} className="generic-button">confirmar</button>
-          <button onClick={() => changeConfirmModalState([false, '', null, confirmModalState[3], ''])} className="generic-button">voltar</button>
+          <ThemeProvider theme={normalTheme}>
+            <Button onClick={handleUserConfirm}
+              size="small" variant="contained"
+            >
+              confirmar
+            </Button>
+            <Button onClick={() => changeConfirmModalState([false, '', null, confirmModalState[3], ''])}
+              size="small"
+            >
+              voltar
+            </Button>
+          </ThemeProvider>
         </div>
       </section>
     </div>
