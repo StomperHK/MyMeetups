@@ -1,0 +1,169 @@
+.mainFlexContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+
+  padding: 20px 30px;
+  min-height: calc(100vh - 48.8px);
+
+  position: relative;
+
+  @media screen and (max-width: 710px) {
+    justify-content: center;
+  }
+
+  @media screen and (max-width: 420px) {
+    padding: 20px 15px;
+  }
+}
+
+.gridContainerWrapper {
+  max-width: 800px;
+
+  position: relative;
+  z-index: 2;
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    @media screen and (max-width: 420px) {
+      font-size: 24px;
+    }
+  }
+
+  @media screen and (max-width: 960px) {
+    max-width: 400px;
+
+    h1 {
+      margin-bottom: 14px;
+    }
+  }
+}
+
+.gridContainerForForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  border: 2px solid var(--blue-color);
+  padding: 12px 0px;
+
+  background-color: var(--content-color-with-high-opacity);
+
+  border-radius: 4px;
+
+  & > form {
+    border-right: 1px solid var(--blue-color);
+    padding: 0px 14px;
+
+    p {
+      margin: 8px 0px 14px;
+      font-size: 14px
+    }
+  }
+
+  & > * > p:first-child {
+    margin: 0px 0px 4px 0px;
+
+    font-size: 13px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 980px) {
+    grid-template-columns: 1fr;
+    padding: 12px;
+
+    & > form {
+      border: none;
+      border-bottom: 1px solid var(--blue-color);
+      padding: 0px 0px 12px;
+    }
+
+    & > div {
+      padding: 12px 0px 0px;
+    }
+  }
+}
+
+.googleLoginContainer {
+  padding: 0px 14px;
+
+  button {
+    display: block;
+    margin-top: 14px;
+    border: 2px solid var(--blue-color);
+    padding: 6px;
+    width: 100%;
+
+    background-color: white;
+
+    border-radius: 4px;
+
+    color: black;
+
+    user-select: none;
+
+    transition: background-color 100ms linear;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  button:active {
+    background-color: rgba(82, 94, 226, 0.2);
+  }
+  
+  figure {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  figcaption {
+    justify-self: start;
+
+    letter-spacing: 1px;
+    font-size: 22px;
+    font-weight: 700;
+    font-variant: small-caps;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: lowercase;
+
+    transform: translateY(-3px);
+
+    @media screen and (max-width: 420px) {
+      font-size: 20px;
+    }
+  }
+}
+
+.underlinedButton {
+  margin-left: 4px;
+  text-decoration: underline;
+}
+
+.rocketImage {
+  flex: auto;
+  width: 30vw;
+  max-width: 430px;
+  min-width: 290px;
+
+  transform: translateY(40px);
+
+  @media screen and (max-width: 710px) {
+    width: 200px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
