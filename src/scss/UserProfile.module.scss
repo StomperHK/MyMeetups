@@ -1,0 +1,157 @@
+.userPhotoButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+
+    transform: translateY(0.5px);
+
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 500.0px) {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+
+    svg {
+      width: 25px !important;
+      height: 25px !important;
+    }
+  }
+}
+
+.userProfileBackdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: var(--backdrop-color);
+
+  opacity: 0;
+
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 4;
+
+  pointer-events: none;
+
+  transition: opacity 150ms linear;
+}
+
+.userProfileWindow {
+  padding: 4px 8px 6px;
+  width: 85vw;
+  max-width: 450px;
+
+  background-color: var(--content-color);
+
+  border-radius: 4px;
+
+  p {
+    text-align: center;
+    color: var(--blue-color);
+
+    @media screen and (max-width: 420px) {
+      font-size: 15px;
+    }
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--blue-color);
+    padding-bottom: 4px;
+
+    p {
+      transform: translateY(1px);
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    button {
+      box-sizing: content-box;
+      padding: 4px;
+      width: 22px;
+      height: 22px;
+  
+      border-radius: 50%;
+  
+      transition: background-color 64ms linear;
+  
+      &:active {
+        background-color: var(--blue-color-with-small-opacity);
+      }
+    }
+  
+    button > svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--blue-color);
+    }
+  }
+
+  img {
+    display: block;
+    margin: 10px auto 11px;
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+  }
+}
+
+.usernameText {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 18px;
+
+  @media screen and (max-width: 420px) {
+    font-size: 17px;
+  }
+}
+
+.singleSVG {
+  display: block;
+  margin: 10px auto;
+  width: 50%;
+  height: auto;
+}
+
+.containerForSVGs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  margin: 10px 0px 14px;
+
+  svg {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+.flexContainerForButtons {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 10px;
+}
+
+.showModal {
+  opacity: 1;
+  pointer-events: auto;
+}
