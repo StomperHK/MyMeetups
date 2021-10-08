@@ -1,11 +1,14 @@
 import {useRef, useState, useEffect} from 'react';
 
-import firestoreDatabase from '../firestore';
+import {firestoreDatabase} from '../firebase';
 import {updateDoc, doc} from 'firebase/firestore';
 
-import styleClasses from '../scss/MeetupViewer.module.scss';
-import {makeStyles} from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
 import TextField from '@material-ui/core/TextField';
+import {makeStyles} from '@material-ui/core/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
+import styleClasses from '../scss/MeetupViewer.module.scss';
 
 let globalVerifiedChanges;
 let globalUpdatedData;
@@ -13,14 +16,17 @@ let globalUpdatedData;
 function MeetupViewer(props) {
   const {
     anchorToGetUnderlinedState,
+    changeDataIsLoadingState,
     meetupsState,
     changeMeetupsState,
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
     meetupViewerState,
-    changeMeetupViewerState
+    changeMeetupViewerState,
+    currentUser
   } = props
+
   const [modalIsActivated, cardIndex, callConfirmModal, toggleBookmarkMeetup] = meetupViewerState
 
   const [userIsEditingState, changeUserIsEditingState] = useState(false)
@@ -33,20 +39,26 @@ function MeetupViewer(props) {
   const hourInputRef = useRef()
   const dateInputRef = useRef()
 
+  const normalTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#525ee2'
+      }
+    }
+  })
+
   useEffect(() => changeViewerBookmarkState(cardIndex !== undefined && meetupsState[cardIndex] ? meetupsState[cardIndex].isBookmarked : false), [meetupsState, cardIndex, meetupViewerState])
   useEffect(updateInputs, [meetupsState, cardIndex])
   useEffect(verifyModalChange, [confirmModalState, changeConfirmModalState])
-
-  const useStyles = makeStyles({
+  
+  const materialClasses = makeStyles({
     root: {
       'margin-top': '10px'
     },
     multiline: {
-      'margin-top': '18px'
+      'margin-top': '9px'
     }
-  })
-  
-  const materialClasses = useStyles()
+  })()
 
   function updateInputs() {
     if (cardIndex === undefined || !meetupsState[cardIndex]) return
@@ -74,7 +86,7 @@ function MeetupViewer(props) {
     changeViewerBookmarkState(!viewerBookmarkState)
 
     if (anchorToGetUnderlinedState === 'second-anchor') {
-      changeMeetupViewerState([false])
+      setTimeout(() => changeMeetupViewerState([false]), 250)
     }
   }
 
@@ -96,12 +108,19 @@ function MeetupViewer(props) {
   }
 
   function updateDatabaseData() {
-    updateDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id), globalVerifiedChanges)
+    changeDataIsLoadingState(true)
+
+    const userUID = currentUser.uid
+    const meetupID = meetupsState[cardIndex].id
+
+    updateDoc(doc(firestoreDatabase, `users/${userUID}/meetups/${meetupID}`), globalVerifiedChanges)
     .then(() => {
+       changeDataIsLoadingState(false)
       changeFrontEndOnUpdate(globalUpdatedData)
       changeFeedbackModalState([true, 'alteração salva', 'normal', 1500])
     })
     .catch(() => {
+     changeDataIsLoadingState(false)
       changeFeedbackModalState([true, 'erro ao salver edições: reinicie a página', 'error', 3000])
     })
   }
@@ -184,7 +203,10 @@ function MeetupViewer(props) {
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
             }
           </button>
-          <button onClick={() => changeUserIsEditingState(!userIsEditingState)} aria-label='editar encontro'>
+          <button className={userIsEditingState ? styleClasses.blueBackgroundColor : ''}
+            onClick={() => changeUserIsEditingState(!userIsEditingState)}
+            aria-label='editar encontro'
+          >
             {
               userIsEditingState ?
               <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><g><path d="M14.06,9.02l0.92,0.92l-1.11,1.11l1.41,1.41l2.52-2.52l-3.75-3.75l-2.52,2.52l1.41,1.41L14.06,9.02z M20.71,7.04 c0.39-0.39,0.39-1.02,0-1.41l-2.34-2.34C18.17,3.09,17.92,3,17.66,3s-0.51,0.1-0.7,0.29l-1.83,1.83l3.75,3.75L20.71,7.04z M2.81,2.81L1.39,4.22l7.32,7.32L3,17.25V21h3.75l5.71-5.71l7.32,7.32l1.41-1.41L2.81,2.81z M5.92,19H5v-0.92l5.13-5.13l0.92,0.92 L5.92,19z"/></g></g></svg> :
@@ -211,7 +233,7 @@ function MeetupViewer(props) {
           />
           <TextField className={materialClasses.multiline}
             label="Descrição" rows={4} inputRef={descriptionInputRef}
-            variant='outlined' multiline fullWidth InputLabelProps={{shrink: true}}
+            multiline fullWidth InputLabelProps={{shrink: true}}
           />
 
           <TextField className={materialClasses.root} 
@@ -228,8 +250,10 @@ function MeetupViewer(props) {
           />
 
           <div className="action-buttons-wrapper">
-            <button className="generic-button" type="reset">resetar</button>
-            <button className="generic-button" type="submit">editar</button>
+          <Button size="small" type="reset" color="error">resetar</Button>
+            <ThemeProvider theme={normalTheme}>
+              <Button size="small" type="submit">editar</Button>
+            </ThemeProvider>
           </div>
         </form>
       </div>

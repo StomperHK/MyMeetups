@@ -1,17 +1,22 @@
 import {useRef} from 'react';
 
-import firestoreDatabase from '../firestore';
-import {collection, addDoc} from "firebase/firestore";
+import {firestoreDatabase} from '../firebase';
+import {collection, addDoc} from 'firebase/firestore';
 
+import Button from '@mui/material/Button';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 function MeetupCreatorModal(props) {
   const {
+    changeDataIsLoadingState,
     changeFeedbackModalState,
     meetupCreatorModalState,
     changeMeetupCreatorModalState,
-    meetupsState, changeMeetupsState
+    meetupsState,
+    changeMeetupsState,
+    currentUser
   } = props
 
   const urlInputRef = useRef()
@@ -21,16 +26,22 @@ function MeetupCreatorModal(props) {
   const hourInputRef = useRef()
   const dateInputRef = useRef()
 
-  const useStyles = makeStyles({
+  const materialClasses = makeStyles({
     root: {
       'margin-top': '10px'
     },
     multiline: {
-      'margin-top': '18px'
+      'margin-top': '9px'
+    }
+  })()
+
+  const normalTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#525ee2'
+      }
     }
   })
-  
-  const materialClasses = useStyles()
 
   function formatDate(date) {
     const [year, month, day] = date.split('-')
@@ -43,14 +54,21 @@ function MeetupCreatorModal(props) {
   }
 
   function pushMeetupData(meetupEntry) {
-    addDoc(collection(firestoreDatabase, 'meetups'), meetupEntry)
+    changeDataIsLoadingState(true)
+
+    const userUID = currentUser.uid
+
+    addDoc(collection(firestoreDatabase, `users/${userUID}/meetups`), {...meetupEntry})
     .then(returnedData => {
+     changeDataIsLoadingState(false)
+
       meetupEntry.id = returnedData.id
 
       updateFrontEndDataOnPush(meetupEntry)
       changeFeedbackModalState([true, 'encontro criado', 'normal', 1500])
     })
     .catch(() => {
+      changeDataIsLoadingState(false)
       changeFeedbackModalState([true, 'erro ao enviar dados: reinicie a página', 'error', 3000])
     })
   }
@@ -96,7 +114,7 @@ function MeetupCreatorModal(props) {
         />
         <TextField className={materialClasses.multiline} 
           label="Descrição" multiline rows={4} inputRef={descriptionInputRef}
-          variant='outlined' fullWidth
+          fullWidth
         />
 
         <TextField className={materialClasses.root} 
@@ -113,8 +131,10 @@ function MeetupCreatorModal(props) {
         />
 
         <div className="action-buttons-wrapper">
-          <button className="generic-button" type="reset">resetar</button>
-          <button className="generic-button" type="submit">criar</button>
+          <Button size="small" type="reset" color="error">resetar</Button>
+          <ThemeProvider theme={normalTheme}>
+            <Button size="small" type="submit">criar</Button>
+          </ThemeProvider>
         </div>
       </form>
     </section>

@@ -1,7 +1,10 @@
 import {useState, useEffect, useRef} from 'react';
 
-import firestoreDatabase from '../firestore';
+import {firestoreDatabase} from '../firebase';
 import {updateDoc, deleteDoc, doc} from 'firebase/firestore';
+
+import Button from '@mui/material/Button';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 import styleClasses from '../scss/Card.module.scss'
 
@@ -10,12 +13,14 @@ function Card(props) {
     cardIndex,
     meetupsState,
     changeMeetupsState,
+    changeDataIsLoadingState,
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
     changeMeetupViewerState,
-    titleName,
+    currentUser,
     imageSource,
+    titleName,
     address,
     hour,
     date,
@@ -25,6 +30,14 @@ function Card(props) {
   const [bookmarkState, changeBookmarkState] = useState(isBookmarked)
   
   const imageRef = useRef()
+
+  const normalTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#525ee2',
+      }
+    }
+  })
 
   useEffect(defineImagesSizes, [])
   useEffect(deleteMeetup, [confirmModalState, cardIndex, changeConfirmModalState])
@@ -36,13 +49,20 @@ function Card(props) {
   }
 
   function deleteDatabaseData() {
-    deleteDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id))
+    changeDataIsLoadingState(true)
+
+    const userUID = currentUser.uid
+    const meetupID = meetupsState[cardIndex].id
+
+    deleteDoc(doc(firestoreDatabase, `users/${userUID}/meetups/${meetupID}`))
     .then(() => {
+      changeDataIsLoadingState(false)
       updateFrontendOnDelete()
       changeMeetupViewerState([false])
       changeFeedbackModalState([true, 'encontro removido', 'normal', 1500])
     })
     .catch(() => {
+      changeDataIsLoadingState(false)
       changeFeedbackModalState([true, 'erro ao deletar encontro: reinicie a página', 'error', 3000])
     })
   }
@@ -72,7 +92,10 @@ function Card(props) {
   }
 
   function toggleBookmarkMeetup() {
-    updateDoc(doc(firestoreDatabase, 'meetups', meetupsState[cardIndex].id), {isBookmarked: !bookmarkState})
+    const userUID = currentUser.uid
+    const meetupID = meetupsState[cardIndex].id
+
+    updateDoc(doc(firestoreDatabase, `users/${userUID}/meetups/${meetupID}`), {isBookmarked: !bookmarkState})
     .then(() => {
       updateFrontEndOnBookmark()
       changeFeedbackModalState([true, `encontro ${bookmarkState ? 'des' : ''}favoritado`, 'normal', 1500])
@@ -91,6 +114,8 @@ function Card(props) {
       return
     }
   }
+
+  defineImagesSizes()
   
   window.addEventListener('resize', defineImagesSizes)
   
@@ -126,11 +151,13 @@ function Card(props) {
 
       <div className={styleClasses.actionsWrapper}>
         <button onClick={callConfirmModal} aria-label="excluir encontro">
-           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
         </button>
-        <button onClick={callMeeetupViewer} className="generic-button">
-          ver mais
-        </button>
+        <ThemeProvider theme={normalTheme}>
+          <Button onClick={callMeeetupViewer} size="small" variant="contained">
+            ver mais
+          </Button>
+        </ThemeProvider>
         <button onClick={toggleBookmarkMeetup} aria-label="favoritar encontro">
           {
             bookmarkState ?
