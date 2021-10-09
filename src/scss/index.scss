@@ -5,11 +5,13 @@
 }
 
 :root {
-  --blue-color: rgb(90, 99, 204);
-  --light-blue-color: rgba(90, 99, 204, 0.2);
+  --blue-color: rgb(82, 94, 226);
+  --blue-color-with-small-opacity: rgba(82, 94, 226, 0.2);
+  --light-blue-color: rgb(105, 132, 230);
   --pink-color: rgb(224, 77, 180);
   --content-color: white;
   --content-color-with-high-opacity: rgba(255, 255, 255, 0.95);
+  --contrast-to-content-color: black;
   --backdrop-color: rgba(0, 0, 0, 0.60);
   --box-shadow-color: rgba(48, 47, 48, 0.6);
 }
@@ -41,87 +43,17 @@ a {
   color: var(--blue-color);
 }
 
+h1, h2, p {
+  word-wrap: break-word;
+}
+
 .introduction-wrapper {
-  padding: 0px 0px 60px 20px;
+  padding: 18px 16px 60px;
   background-color: var(--blue-color);
   color: var(--content-color);
 
   h2 {
     font-size: 30px;
-  }
-}
-
-.text-and-symbol-aligner {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.generic-button {
-  border: 2px solid var(--blue-color);
-  padding: 4px 7px;
-
-  border-radius: 4px;
-
-  font-variant: small-caps;
-  font-size: 14px;
-  font-weight: 600;
-
-  user-select: none;
-
-  transition: background-color 100ms linear, transform 100ms linear;
-
-  &:hover {
-    background-color: var(--blue-color);
-    color: var(--content-color);
-  }
-
-  &:active {
-    background-color: var(--blue-color);
-    color: var(--content-color);
-
-    transform: scale(0.94);
-  }
-}
-
-.createMeetupWrapper {
-  display: block;
-  margin: 20vh auto 0px auto;
-  width: 160px;
-
-  color: var(--blue-color);
-
-  text-decoration: none;
-
-  user-select: none;
-
-  transition: transform 100ms ease;
-
-  div {
-    margin-bottom: 10px;
-    border: 3px solid currentColor;
-    padding: 40px 60px;
-
-    border-radius: 6px;
-  }
-
-  svg {
-    width: 40px;
-    height: 40px;
-    fill: currentColor;
-  }
-
-  p {
-    color: currentColor;
-    font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 2px;
-  }
-
-  &:active {
-    transform: scale(0.94)
   }
 }
 
@@ -139,20 +71,6 @@ a {
   overflow: auto;
 
   transition: transform 300ms ease;
-
-  .action-buttons-wrapper {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    @media screen and (max-height: 524px) {
-      position: static;
-      bottom: initial;
-      left: initial;
-      transform: none;
-    }
-  }
 }
 
 .modal-header {
@@ -161,7 +79,7 @@ a {
   align-items: center;
 
   padding: 6px 10px;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--blue-color);
 
   position: sticky;
   top: 0px;
@@ -177,10 +95,10 @@ a {
 
     border-radius: 50%;
 
-    transition: background-color 64ms linear;
+    transition: background-color 80ms linear;
 
     &:active {
-      background-color: var(--light-blue-color)
+      background-color: var(--blue-color-with-small-opacity);
     }
   }
 
@@ -189,11 +107,23 @@ a {
     height: 22px;
     fill: var(--blue-color);
   }
+
+  @media screen and (max-width: 490px) {
+    h2 {
+      font-size: 22px;
+    }
+  }
+
+  @media screen and (max-width: 370px) {
+    h2 {
+      font-size: 21px;
+    }
+  }
 }
 
 .modal-form {
   margin: 0px auto;
-  padding: 0px 10px 10px;
+  padding: 0px 18px 10px;
   max-width: 600px;
 
   & > button {
@@ -209,22 +139,98 @@ a {
   justify-content: space-between;
   gap: 10px;
 
+  margin-top: 20px;
+
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+
   padding: 0px 10px;
   width: 100%;
-
-  button:first-child {
-    border-color: rgb(251, 43, 57);
-    color: rgb(251, 43, 57);
-
-    &:hover {
-      background-color: rgb(251, 43, 57);
-      color: var(--content-color)
-    }
-  }
+  max-width: 600px;
 
   button {
     width: 100%;
   }
+
+  @media screen and (max-height: 530px) {
+    position: static;
+    bottom: initial;
+    left: initial;
+    transform: none;
+  }
+}
+
+.button-with-white-background-transition-active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: content-box;
+  width: 30px;
+  height: 30px;
+  padding: 1px;
+
+  border-radius: 50%;
+
+  transition: background-color 150ms linear;
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Material UI library styles override */
+
+.MuiFormLabel-root.MuiFormLabel-root {
+  color: var(--blue-color);
+}
+
+.MuiInput-underline.MuiInput-underline:before,
+.MuiInput-underline.MuiInput-underline:after {
+  content: none;
+}
+
+.MuiInput-input.MuiInput-input {
+  color: var(--blue-color);
+}
+
+.MuiButton-contained.MuiButton-contained.MuiButton-contained {
+  box-shadow:
+  0px 3px 1px -2px rgba(0,0,0,0.2),
+  0px 2px 2px 0px rgba(0,0,0,0.14),
+  0px 1px 5px 0px rgba(0,0,0,0.12);
+}
+
+.MuiIconButton-root.MuiIconButton-root {
+  padding: 5px;
+}
+
+.MuiInputBase-root {
+  border-bottom: 2px solid var(--blue-color);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--blue-color);
+  }
+}
+
+.MuiInputLabel-root:not(.Mui-focused, .MuiInputLabel-shrink) {
+  transform: translateY(19px) scale(1);
+}
+
+.MuiInput-underline.MuiInput-underline:after {
+  border-bottom: 2px solid var(--blue-color);
+}
+
+.MuiButton-containedPrimary.MuiButton-containedPrimary:hover {
+  background-color: #525ee2;
+}
+
+.MuiButton-outlined.MuiButton-outlined.MuiButton-outlined {
+  border-width: 2px;
 }
 
 /* JavaScript style classes */
