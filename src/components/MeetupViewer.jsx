@@ -152,6 +152,11 @@ function MeetupViewer(props) {
     }
   }
 
+  function handleEditButtonClick() {
+    if (userIsEditingState) updateInputs()
+    changeUserIsEditingState(!userIsEditingState)
+  }
+
   function returnMeetupBody() {
     if (meetupsState[cardIndex]) {
       const {image, title, description, address, hour, date} = meetupsState[cardIndex]
@@ -204,7 +209,7 @@ function MeetupViewer(props) {
             }
           </button>
           <button className={userIsEditingState ? styleClasses.blueBackgroundColor : ''}
-            onClick={() => changeUserIsEditingState(!userIsEditingState)}
+            onClick={handleEditButtonClick}
             aria-label='editar encontro'
           >
             {
