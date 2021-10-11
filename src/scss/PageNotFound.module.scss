@@ -1,0 +1,40 @@
+.mainFlexWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+
+  & > p {
+    text-align: center;
+    font-size: 90px;
+    font-weight: 800;
+
+    @media screen and (max-width: 550px) {
+      font-size: 75px;
+    }
+  }
+
+  & > div {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+
+    p {
+      font-size: 22px;
+      font-weight: 600;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    grid-template-columns: 1fr;
+  }
+}
