@@ -1,5 +1,5 @@
 .modalContainer {
-  padding: 8px 12px;
+  padding: 21px 12px 12px;
   width: 100%;
 
   position: fixed;
@@ -23,6 +23,27 @@
     font-size: 17px;
     font-weight: 600;
     line-height: 0px;
+    word-break: break-word;
+  }
+
+  button {
+    padding: 4px;
+
+    position: absolute;
+    top: 2px;
+    right: 4px;
+
+    transition: transform 100ms linear;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    &:active {
+      transform: scale(0.85);
+    }
   }
 }
 
