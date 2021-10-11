@@ -20,7 +20,7 @@ import styleClasses from '../scss/ApplicationLoginRegister.module.scss';
 import Header from '../components/Header';
 
 function ApplicationLoginRegister(props) {
-  useEffect(() => changeDataIsLoadingState(false), []) // keep it truthy
+  useEffect(() => changeDataIsLoadingState(true), [])
 
   const [userOperation, changeUserOperation] = useState('login')
   const [showPassword, changeShowPassword] = useState(false)
@@ -89,7 +89,7 @@ function ApplicationLoginRegister(props) {
   }
 
   function redirectUserIfHeIsLogged() {
-    history.replace('/encontros')
+    history.replace('/')
   }
 
   function getUserState() {
