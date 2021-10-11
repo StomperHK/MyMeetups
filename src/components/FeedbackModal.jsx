@@ -35,6 +35,7 @@ function FeedbackModal(props) {
         ${getModalType() === 'alert' ? styleClasses.modalAlertColor : ''}
         ${getModalState() ? styleClasses.modalActiver : ''}
       `}
+      aria-hidden={getModalState() ? 'undefined' : 'true'}
     >
       <p><span>{feedbackModalState[1]}</span></p>
       <button onClick={() => changeFeedbackModalState([false, ...modalOptions])}
