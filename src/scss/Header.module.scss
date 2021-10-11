@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
 
-  padding: 8px 16px;
+  padding: 8px 14px;
 
   background-color: var(--blue-color);
   color: var(--content-color);
@@ -12,8 +12,8 @@
     font-size: 14px !important;
 
     svg {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       fill: var(--content-color);
     }
   }
@@ -78,7 +78,7 @@
     .hamburguerMenuCloser {
       display: flex;
       position: absolute;
-      top: 10px;
+      top: 12px;
       right: 26px;
 
       @media screen and (max-width: 340px) {

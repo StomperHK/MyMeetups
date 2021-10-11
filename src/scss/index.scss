@@ -24,12 +24,15 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  user-select: none;
 }
 
 button {
   border: none;
   background-color: transparent;
   color: var(--blue-color);
+
   cursor: pointer;
 
   @media (pointer: coarse) {
@@ -41,14 +44,15 @@ button {
 
 a {
   color: var(--blue-color);
+  text-decoration: none;
 }
 
-h1, h2, p {
+h1, h2, p, span {
   word-wrap: break-word;
 }
 
 .introduction-wrapper {
-  padding: 18px 16px 60px;
+  padding: 18px 14px 60px;
   background-color: var(--blue-color);
   color: var(--content-color);
 
@@ -66,6 +70,8 @@ h1, h2, p {
   left: 0px;
   z-index: 2;
 
+  transform: translateY(100px);
+
   background-color: var(--content-color);
 
   overflow: auto;
@@ -78,24 +84,20 @@ h1, h2, p {
   justify-content: space-between;
   align-items: center;
 
-  padding: 6px 10px;
+  padding: 5px 6px;
   border-bottom: 1px solid var(--blue-color);
-
-  position: sticky;
-  top: 0px;
-  z-index: 1;
 
   background-color: var(--content-color);
 
   button {
     box-sizing: content-box;
-    padding: 4px;
-    width: 22px;
-    height: 22px;
+    padding: 6px;
+    width: 24px;
+    height: 24px;
 
     border-radius: 50%;
 
-    transition: background-color 80ms linear;
+    transition: background-color 150ms linear;
 
     &:active {
       background-color: var(--blue-color-with-small-opacity);
@@ -103,8 +105,8 @@ h1, h2, p {
   }
 
   svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     fill: var(--blue-color);
   }
 
@@ -170,7 +172,7 @@ h1, h2, p {
   box-sizing: content-box;
   width: 30px;
   height: 30px;
-  padding: 1px;
+  padding: 2px;
 
   border-radius: 50%;
 
@@ -227,10 +229,6 @@ h1, h2, p {
 
 .MuiButton-containedPrimary.MuiButton-containedPrimary:hover {
   background-color: #525ee2;
-}
-
-.MuiButton-outlined.MuiButton-outlined.MuiButton-outlined {
-  border-width: 2px;
 }
 
 /* JavaScript style classes */

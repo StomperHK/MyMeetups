@@ -75,20 +75,19 @@
     padding-bottom: 4px;
 
     p {
-      transform: translateY(1px);
       font-size: 19px;
       font-weight: 600;
     }
 
     button {
       box-sizing: content-box;
-      padding: 4px;
+      padding: 6px;
       width: 22px;
       height: 22px;
   
       border-radius: 50%;
   
-      transition: background-color 64ms linear;
+      transition: background-color 150ms linear;
   
       &:active {
         background-color: var(--blue-color-with-small-opacity);
