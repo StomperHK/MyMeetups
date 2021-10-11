@@ -5,7 +5,7 @@
   gap: 30px;
 
   padding: 20px 30px;
-  min-height: calc(100vh - 48.8px);
+  min-height: calc(100vh - 51px);
 
   position: relative;
 
@@ -131,17 +131,13 @@
     justify-self: start;
 
     letter-spacing: 1px;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     font-variant: small-caps;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Roboto', sans-serif;
     text-transform: lowercase;
 
-    transform: translateY(-3px);
-
-    @media screen and (max-width: 420px) {
-      font-size: 20px;
-    }
+    transform: translateY(-1px);
   }
 }
 

@@ -1,8 +1,8 @@
 .meetupCreatorButton {
   box-sizing: content-box;
-  padding: 11px;
-  width: 24px;
-  height: 24px;
+  padding: 12px;
+  width: 28px;
+  height: 28px;
 
   position: fixed;
   right: 16px;
@@ -20,17 +20,19 @@
   transition: opacity 150ms linear;
 
   svg {
+    width: 28px;
+    height: 28px;
     fill: var(--content-color);
   }
 }
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 10px;
 
   margin: -35px auto 0px;
-  padding: 0px 2.5vw 55px;
+  padding: 0px 2.5vw 70px;
   max-width: 1700px;
 
   animation: show-element 800ms linear forwards;

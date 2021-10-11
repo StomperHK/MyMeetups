@@ -5,35 +5,36 @@
     &::after {   // Tooltip's Styles
       display: block;
       border: 1px solid var(--blue-color);
-      padding: 4px;
+      padding: 5px;
 
       position: absolute;
       top: 100%;
+      z-index: 2;
 
-      background: var(--content-color-with-high-opacity);
+      background-color: var(--content-color-with-high-opacity);
 
       border-radius: 4px;
 
       opacity: 0;
 
-      font-size: 14px;
+      font-size: 15px;
 
       white-space: nowrap;
 
       pointer-events: none;
 
-      transition: opacity 100ms linear;
+      transition: opacity 100ms 750ms linear;
     }
 
     &:active::after {
       opacity: 1;
-      transition-delay: 350ms;
+      transition-delay: 600ms;
     }
 
     @media (pointer: fine) {
       &:hover::after {
         opacity: 1;
-        transition-delay: 350ms;
+        transition-delay: 600ms;
       }
     }
   }
@@ -45,19 +46,19 @@
   button:nth-child(1)::after {
     content: 'excluir';
     left: 50%;
-    transform: translate(-50%, 4px);
+    transform: translate(-50%, 9px);
   }
 
   button:nth-child(2)::after {
     content: 'favoritar';
     left: 50%;
-    transform: translate(-50%, 4px);
+    transform: translate(-50%, 9px);
   }
 
   button:nth-child(3)::after {
     content: 'editar';
     right: 0%;
-    transform: translateY(4px);
+    transform: translateY(9px);
   }
 }
 
