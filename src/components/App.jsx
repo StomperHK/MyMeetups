@@ -4,33 +4,28 @@ import {Route, Switch, useLocation} from 'react-router-dom';
 
 import ApplicationLoginRegister from '../pages/ApplicationLoginRegister';
 import ApplicationCore from '../pages/ApplicationCore';
+import PageNotFound from '../pages/PageNotFound';
 import LoadingScreen from '../components/LoadingScreen';
 import FeedbackModal from '../components/FeedbackModal';
 
 function App() {
   const [dataIsLoading, changeDataIsLoadingState] = useState(true)
-  const [feedbackModalState, changeFeedbackModalState] = useState([false, '_', 'normal'])
+  const [feedbackModalState, changeFeedbackModalState] = useState([false, '', 'normal'])
 
   const {pathname} = useLocation()
 
   return (
     <Fragment>
       <Switch>
-        {
-          pathname === '/entrar-registro' || pathname === '/' ?
-          (
-            <Route>
-              <ApplicationLoginRegister
-                changeDataIsLoadingState={changeDataIsLoadingState}
-                changeFeedbackModalState={changeFeedbackModalState}
-              />
-            </Route>
-          ) :
-          null
-        }
+        <Route path='/entrar-registro'>
+          <ApplicationLoginRegister
+            changeDataIsLoadingState={changeDataIsLoadingState}
+            changeFeedbackModalState={changeFeedbackModalState}
+          />
+        </Route>
   
         {
-          pathname === '/encontros' || pathname === '/favoritos' ?
+          pathname === '/' || pathname === '/favoritos' ?
           (
             <Route>
               <ApplicationCore
@@ -43,6 +38,10 @@ function App() {
           ) :
           null
         }
+
+        <Route>
+          <PageNotFound changeDataIsLoadingState={changeDataIsLoadingState} />
+        </Route>
       </Switch>
 
       {dataIsLoading ? <LoadingScreen /> : null}
