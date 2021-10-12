@@ -2,12 +2,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 30px;
+  gap: 50px;
 
   padding: 20px 30px;
   min-height: calc(100vh - 51px);
 
   position: relative;
+
+  @media screen and (min-width: 2000px) {
+    justify-content: space-evenly;
+  }
 
   @media screen and (max-width: 710px) {
     justify-content: center;
@@ -132,7 +136,7 @@
 
     letter-spacing: 1px;
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     font-variant: small-caps;
     font-family: 'Roboto', sans-serif;
     text-transform: lowercase;
@@ -149,7 +153,7 @@
 .rocketImage {
   flex: auto;
   width: 30vw;
-  max-width: 430px;
+  max-width: 500px;
   min-width: 290px;
 
   transform: translateY(40px);
