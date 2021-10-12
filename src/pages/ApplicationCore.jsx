@@ -69,16 +69,7 @@ function ApplicationCore(props) {
       }
     }, error => callErrorMessageHandler(error.code))
   }
-  
-  function toggleRemoveWindowScrollbar() {
-    const htmlEL = document.querySelector('html')
 
-    meetupCreatorModalState || meetupViewerState[0] ?
-    htmlEL.classList.add('overflow-hidden') :
-    htmlEL.classList.remove('overflow-hidden')
-  }
-
-  useEffect(toggleRemoveWindowScrollbar, [meetupCreatorModalState, meetupViewerState])
   useEffect(getUserState, [])
   
   function getMeetupsData(user) {
