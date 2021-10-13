@@ -2,16 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 50px;
+  gap: 40px;
 
+  margin: 0px auto;
   padding: 20px 30px;
+  max-width: 1100px;
   min-height: calc(100vh - 51px);
 
   position: relative;
-
-  @media screen and (min-width: 2000px) {
-    justify-content: space-evenly;
-  }
 
   @media screen and (max-width: 710px) {
     justify-content: center;
@@ -23,7 +21,7 @@
 }
 
 .gridContainerWrapper {
-  max-width: 800px;
+  max-width: 400px;
 
   position: relative;
   z-index: 2;
@@ -50,18 +48,19 @@
 
 .gridContainerForForm {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
 
   border: 2px solid var(--blue-color);
-  padding: 12px 0px;
+  padding: 12px;
 
   background-color: var(--content-color-with-high-opacity);
 
   border-radius: 4px;
 
   & > form {
-    border-right: 1px solid var(--blue-color);
-    padding: 0px 14px;
+    border: none;
+    border-bottom: 1px solid var(--blue-color);
+    padding: 0px 0px 12px;
 
     p {
       margin: 8px 0px 14px;
@@ -78,19 +77,8 @@
     text-transform: uppercase;
   }
 
-  @media screen and (max-width: 980px) {
-    grid-template-columns: 1fr;
-    padding: 12px;
-
-    & > form {
-      border: none;
-      border-bottom: 1px solid var(--blue-color);
-      padding: 0px 0px 12px;
-    }
-
-    & > div {
-      padding: 12px 0px 0px;
-    }
+  & > div {
+    padding: 12px 0px 0px;
   }
 }
 
@@ -153,7 +141,7 @@
 .rocketImage {
   flex: auto;
   width: 30vw;
-  max-width: 500px;
+  max-width: 400px;
   min-width: 290px;
 
   transform: translateY(40px);
