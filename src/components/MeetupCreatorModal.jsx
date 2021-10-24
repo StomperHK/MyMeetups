@@ -90,7 +90,7 @@ function MeetupCreatorModal(props) {
   }
 
   return (
-    <section
+    <div
       className={`modal-container ${meetupCreatorModalState ? 'modal-activer' : ''}`}
       aria-hidden={!meetupCreatorModalState ? 'true' : 'undefined'}
     >
@@ -137,7 +137,7 @@ function MeetupCreatorModal(props) {
           </ThemeProvider>
         </div>
       </form>
-    </section>
+    </div>
   )
 }
 
