@@ -66,11 +66,11 @@ h1, h2, p, span {
   height: 100vh;
 
   position: fixed;
-  top: 100%;
+  top: 0px;
   left: 0px;
   z-index: 2;
 
-  transform: translateY(100px);
+  transform: translateY(calc(100vh + 100px));
 
   background-color: var(--content-color);
 
@@ -126,7 +126,7 @@ h1, h2, p, span {
 .modal-form {
   margin: 0px auto;
   padding: 0px 18px 10px;
-  max-width: 600px;
+  max-width: 750px;
 
   & > button {
     display: block;
@@ -238,7 +238,7 @@ h1, h2, p, span {
 }
 
 .modal-activer {
-  transform: translateY(-100%);
+  transform: translateY(0px);
 }
 
 .overflow-hidden {
