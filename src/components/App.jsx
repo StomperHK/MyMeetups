@@ -1,6 +1,6 @@
-import {Fragment, useState} from 'react';
+import {useState} from 'react';
 
-import {Route, Switch, useLocation} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 import ApplicationLoginRegister from '../pages/ApplicationLoginRegister';
 import ApplicationCore from '../pages/ApplicationCore';
@@ -12,10 +12,8 @@ function App() {
   const [dataIsLoading, changeDataIsLoadingState] = useState(true)
   const [feedbackModalState, changeFeedbackModalState] = useState([false, '', 'normal'])
 
-  const {pathname} = useLocation()
-
   return (
-    <Fragment>
+    <div aria-busy={dataIsLoading ? 'true' : 'false'} aria-labelledby={dataIsLoading ? 'loading-screen' : ''}>
       <Switch>
         <Route path='/entrar-registro'>
           <ApplicationLoginRegister
@@ -24,33 +22,27 @@ function App() {
           />
         </Route>
   
-        {
-          pathname === '/' || pathname === '/favoritos' ?
-          (
-            <Route>
-              <ApplicationCore
-                dataIsLoading={dataIsLoading}
-                changeDataIsLoadingState={changeDataIsLoadingState}
-                feedbackModalState={feedbackModalState}
-                changeFeedbackModalState={changeFeedbackModalState}
-              />
-            </Route>
-          ) :
-          null
-        }
+        <Route path={['/', '/favoritos']} exact>
+          <ApplicationCore
+            dataIsLoading={dataIsLoading}
+            changeDataIsLoadingState={changeDataIsLoadingState}
+            feedbackModalState={feedbackModalState}
+            changeFeedbackModalState={changeFeedbackModalState}
+          />
+        </Route>
 
         <Route>
           <PageNotFound changeDataIsLoadingState={changeDataIsLoadingState} />
         </Route>
       </Switch>
 
-      {dataIsLoading ? <LoadingScreen /> : null}
+      <LoadingScreen dataIsLoading={dataIsLoading} />
       
       <FeedbackModal
         feedbackModalState={feedbackModalState}
         changeFeedbackModalState={changeFeedbackModalState}
       />
-    </Fragment>
+    </div>
   )
 }
 
