@@ -6,7 +6,7 @@ import {updateDoc, deleteDoc, doc} from 'firebase/firestore';
 import Button from '@mui/material/Button';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
-import styleClasses from '../scss/Card.module.scss'
+import styleClasses from '../scss/Card.module.scss';
 
 function Card(props) {
   const {
@@ -39,8 +39,17 @@ function Card(props) {
     }
   })
 
-  useEffect(defineImagesSizes, [])
+  useEffect(manageImageResize, [])
+  useEffect(defineImageSize, [])
   useEffect(deleteMeetup, [confirmModalState, cardIndex, changeConfirmModalState])
+
+  function manageImageResize() {
+    window.addEventListener('resize', defineImageSize)
+
+    return () => {
+      window.removeEventListener('resize', defineImageSize)
+    }
+  }
 
   function updateFrontendOnDelete() {
     let temporaryArray = meetupsState.slice()
@@ -105,7 +114,7 @@ function Card(props) {
     })
   }
 
-  function defineImagesSizes() {
+  function defineImageSize() {
     try {
       const imageEL = imageRef.current
       imageEL.style.height = imageEL.clientWidth / (16 / 6) + 'px'
@@ -115,12 +124,10 @@ function Card(props) {
     }
   }
 
-  defineImagesSizes()
-  
-  window.addEventListener('resize', defineImagesSizes)
+  defineImageSize()
   
   return (
-    <article className={styleClasses.card}>
+    <article className={styleClasses.card} aria-label={titleName}>
       <figure>
         {
           imageSource ?
@@ -150,15 +157,21 @@ function Card(props) {
       </figure>
 
       <div className={styleClasses.actionsWrapper}>
-        <button onClick={callConfirmModal} aria-label="excluir encontro">
+        <button onClick={callConfirmModal} 
+          aria-label="excluir encontro" aria-haspopup="dialog"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
         </button>
         <ThemeProvider theme={normalTheme}>
-          <Button onClick={callMeeetupViewer} size="small" variant="contained">
+          <Button onClick={callMeeetupViewer} aria-haspopup="dialog"
+            size="small" variant="contained"
+          >
             ver mais
           </Button>
         </ThemeProvider>
-        <button onClick={toggleBookmarkMeetup} aria-label="favoritar encontro">
+        <button onClick={toggleBookmarkMeetup}
+          aria-label="favoritar encontro" aria-pressed={bookmarkState ? 'true' : 'false'} aria-haspopup="dialog"
+        >
           {
             bookmarkState ?
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg> :
