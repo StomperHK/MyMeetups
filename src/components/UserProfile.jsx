@@ -1,4 +1,4 @@
-import {Fragment, useState} from 'react';
+import {Fragment, useState, useEffect, useRef} from 'react';
 
 import {signOut} from 'firebase/auth';
 
@@ -9,14 +9,16 @@ import {makeStyles} from '@material-ui/core/styles';
 import styleClasses from '../scss/UserProfile.module.scss';
 
 function UserProfile(props) {
-  const [profileModalState, changeProfileModalState] = useState(false)
-
   const {
     auth,
     currentUser,
     changeDataIsLoadingState,
     changeFeedbackModalState
   } = props
+
+  const [profileModalState, changeProfileModalState] = useState(false)
+
+  const firstModalElementRef = useRef()
 
   const normalTheme = createTheme({
     palette: {
@@ -44,6 +46,14 @@ function UserProfile(props) {
     'auth/web-storage-unsupported': ['seu navegador não suporta armazenamento de dados', 5000],
   }
 
+  useEffect(focusFirstModalElement, [profileModalState])
+
+  function focusFirstModalElement() {
+    if (profileModalState) {
+      firstModalElementRef.current.focus()
+    }
+  }
+
   function callErrorMessageHandler(errorCode) {
     const [treatedErrorMessage, duration] =
       firebaseAuthenticationErrors[errorCode] || ['erro inesperado: reinicie a página', 3000]
@@ -64,7 +74,7 @@ function UserProfile(props) {
     })
   }
 
-  function showDifferentContentsDependingOnTheUser() {
+  function showDifferentContentsDependingOfTheUser() {
     return !currentUser ?
       (
         <Fragment>
@@ -74,7 +84,7 @@ function UserProfile(props) {
             <path d="M769,520.58909l21.76811,163.37417,27.09338-5.578s-3.98437-118.98157,9.56238-133.32513S810,505.58909,810,505.58909Z" transform="translate(-205 -193.89598)" fill="#2f2e41"/><path d="M778,475.58909l-10,15s-77-31.99929-77,19-4.40631,85.60944-6,88,18.43762,8.59375,28,7c0,0,11.79687-82.21884,11-87,0,0,75.53355,37.03335,89.87712,33.84591S831.60944,536.964,834,530.58909s-1-57-1-57l-47.81-14.59036Z" transform="translate(-205 -193.89598)" fill="#2f2e41"/><path d="M779.34915,385.52862l-2.85032-3.42039s-31.92361-71.82815-19.3822-91.21035,67.26762-22.23252,68.97783-21.0924-4.08488,15.9428-.09446,22.78361c0,0-42.394,9.19121-45.24435,10.33134s21.96615,43.2737,21.96615,43.2737l-2.85031,25.6529Z" transform="translate(-205 -193.89598)" fill="#ccc"/><path d="M835.21549,350.18459S805.57217,353.605,804.432,353.605s-1.71017-7.41084-1.71017-7.41084l-26.223,35.91406S763.57961,486.29929,767,484.58909s66.50531,8.11165,67.07539,3.55114-.57008-27.3631,1.14014-28.50324,29.64328-71.82811,29.64328-71.82811-2.85032-14.82168-12.54142-19.95227S835.21549,350.18459,835.21549,350.18459Z" transform="translate(-205 -193.89598)" fill="#ccc"/><path d="M855.73783,378.11779l9.121,9.69109S878.41081,499.1687,871,502.58909s-22,3-22,3l-14.35458-52.79286Z" transform="translate(-205 -193.89598)" fill="#ccc"/><circle cx="601.72966" cy="122.9976" r="26.2388" fill="#a0616a"/>
             <path d="M800.57267,320.98789c-.35442-5.44445-7.22306-5.631-12.67878-5.68255s-11.97836.14321-15.0654-4.35543c-2.0401-2.973-1.65042-7.10032.035-10.28779s4.45772-5.639,7.18508-7.99742c7.04139-6.08884,14.29842-12.12936,22.7522-16.02662s18.36045-5.472,27.12788-2.3435c10.77008,3.84307,25.32927,23.62588,26.5865,34.99176s-3.28507,22.95252-10.9419,31.44586-25.18188,5.0665-36.21069,8.088c6.7049-9.48964,2.28541-26.73258-8.45572-31.164Z" transform="translate(-205 -193.89598)" fill="#2f2e41"/><circle cx="361.7217" cy="403.5046" r="62.98931" fill="#6f63ff"/><path d="M524.65625,529.9355a45.15919,45.15919,0,0,1-41.25537-26.78614L383.44873,278.05757a59.83039,59.83039,0,1,1,111.87012-41.86426l72.37744,235.41211a45.07978,45.07978,0,0,1-43.04,58.33008Z" transform="translate(-205 -193.89598)" fill="#6f63ff"/>
           </svg>
-          <p>você está sem conta</p>
+          <p tabIndex="0">você está sem conta</p>
         </Fragment>
       ) :
       (
@@ -97,9 +107,9 @@ function UserProfile(props) {
             </svg>
           </div>)}
 
-          <p className={styleClasses.usernameText}>{currentUser.displayName}</p>
+          <p className={styleClasses.usernameText} tabIndex="0">{currentUser.displayName}</p>
 
-          <p>{currentUser.email}</p>
+          <p tabIndex="0">{currentUser.email}</p>
 
           <ThemeProvider theme={normalTheme}>
             <Button className={centerButtonMaterialClass.root}
@@ -115,9 +125,10 @@ function UserProfile(props) {
   }
 
   return (
-    <article>
+    <article role="dialog" aria-labelledby="user-profie-label">
       <button className={`${styleClasses.userPhotoButton} button-with-white-background-transition-active`}
         onClick={() => changeProfileModalState(true)} aria-label="visualizar conta"
+        aria-haspopup="dialog"
       >
         {currentUser ?
         <img src={currentUser.photoURL} alt="" aria-label="foto do usuário" /> :
@@ -125,17 +136,20 @@ function UserProfile(props) {
       </button>
 
       <div className={`${styleClasses.userProfileBackdrop} ${profileModalState ? styleClasses.showModal : ''}`}
-        aria-hidden={profileModalState ? 'undefined' : 'true'}
       >
         <div className={styleClasses.userProfileWindow}>
           <header>
-            <p>Conta</p>
-            <button onClick={() => changeProfileModalState(false)} aria-label="fechar janela de perfil">
+            <p id="user-profie-label" tabIndex="0">Sua conta</p>
+            <button className={styleClasses.firstModalElement} 
+              onClick={() => changeProfileModalState(false)}
+              aria-label="fechar janela de perfil"
+              ref={firstModalElementRef}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
             </button>
           </header>
 
-          {showDifferentContentsDependingOnTheUser()}
+          {showDifferentContentsDependingOfTheUser()}
         </div>
       </div>
     </article>

@@ -3,6 +3,8 @@ import {useRef, useState, useEffect} from 'react';
 import {firestoreDatabase} from '../firebase';
 import {updateDoc, doc} from 'firebase/firestore';
 
+import {useLocation} from 'react-router-dom';
+
 import Button from '@mui/material/Button';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
@@ -15,7 +17,6 @@ let globalUpdatedData;
 
 function MeetupViewer(props) {
   const {
-    anchorToGetUnderlinedState,
     changeDataIsLoadingState,
     meetupsState,
     changeMeetupsState,
@@ -32,12 +33,20 @@ function MeetupViewer(props) {
   const [userIsEditingState, changeUserIsEditingState] = useState(false)
   const [viewerBookmarkState, changeViewerBookmarkState] = useState(false)
 
+  const firstModalElementRef = useRef()
   const urlInputRef = useRef()
   const titleInputRef = useRef()
   const descriptionInputRef = useRef()
   const adressInputRef = useRef()
   const hourInputRef = useRef()
   const dateInputRef = useRef()
+
+  useEffect(focusFirstModalElement, [meetupViewerState])
+  useEffect(() => changeViewerBookmarkState(cardIndex !== undefined && meetupsState[cardIndex] ? meetupsState[cardIndex].isBookmarked : false), [meetupsState, cardIndex, meetupViewerState])
+  useEffect(updateInputs, [meetupsState, cardIndex])
+  useEffect(verifyModalChange, [confirmModalState, changeConfirmModalState])
+
+  const pathname = useLocation().pathname
 
   const normalTheme = createTheme({
     palette: {
@@ -46,10 +55,6 @@ function MeetupViewer(props) {
       }
     }
   })
-
-  useEffect(() => changeViewerBookmarkState(cardIndex !== undefined && meetupsState[cardIndex] ? meetupsState[cardIndex].isBookmarked : false), [meetupsState, cardIndex, meetupViewerState])
-  useEffect(updateInputs, [meetupsState, cardIndex])
-  useEffect(verifyModalChange, [confirmModalState, changeConfirmModalState])
   
   const materialClasses = makeStyles({
     root: {
@@ -59,6 +64,12 @@ function MeetupViewer(props) {
       'margin-top': '9px'
     }
   })()
+
+  function focusFirstModalElement() {
+    if (meetupViewerState) {
+      firstModalElementRef.current.focus()
+    }
+  }
 
   function updateInputs() {
     if (cardIndex === undefined || !meetupsState[cardIndex]) return
@@ -85,7 +96,7 @@ function MeetupViewer(props) {
     toggleBookmarkMeetup()
     changeViewerBookmarkState(!viewerBookmarkState)
 
-    if (anchorToGetUnderlinedState === 'second-anchor') {
+    if (pathname === 'favoritos') {
       setTimeout(() => changeMeetupViewerState([false]), 250)
     }
   }
@@ -166,9 +177,9 @@ function MeetupViewer(props) {
           className={`${styleClasses.contentContainer} ${!userIsEditingState ? styleClasses.showContainer : ''}`}
         >
           {image ? <img src={image} alt="" /> : ''}
-          <h2>{title}</h2>
-          {description ? <p>{description}</p> : null}
-          <ul>
+          <h2 tabIndex="0">{title}</h2>
+          {description ? <p tabIndex="0">{description}</p> : null}
+          <ul tabIndex="0">
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>
               <p>{address}</p>
@@ -188,20 +199,28 @@ function MeetupViewer(props) {
   }
 
   return (
-    <section 
+    <div
       className={`modal-container ${modalIsActivated ? 'modal-activer' : ''}`}
-      aria-hidden={!modalIsActivated ? 'true' : 'undefined'}
+      role="dialog" aria-label="visualização do encontro"
     >
-      <header className="modal-header">
-        <button onClick={() => changeMeetupViewerState([false, cardIndex])} aria-label="voltar">
+      <header className="modal-header sticky-header">
+        <button className='first-modal-element'
+          onClick={() => changeMeetupViewerState([false, cardIndex])}
+          aria-label="voltar"
+          ref={firstModalElementRef}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
         </button>
 
-        <div className={styleClasses.iconsWrapper}>
-          <button onClick={callConfirmModal} aria-label="excluir encontro">
+        <div className={styleClasses.iconsWrapper} role="toolbar" aria-label="manipulações do encontro">
+          <button onClick={callConfirmModal}
+            aria-label="excluir encontro" aria-haspopup="dialog"
+            >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
           </button>
-          <button onClick={changeMeetupBookmark} aria-label="favoritar encontro">
+          <button onClick={changeMeetupBookmark} 
+            aria-label="favoritar encontro" aria-haspopup="dialog"
+          >
             {
               cardIndex !== undefined && viewerBookmarkState ?
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg> :
@@ -210,7 +229,7 @@ function MeetupViewer(props) {
           </button>
           <button className={userIsEditingState ? styleClasses.blueBackgroundColor : ''}
             onClick={handleEditButtonClick}
-            aria-label='editar encontro'
+            aria-label='editar encontro' aria-pressed={userIsEditingState ? 'true' : 'false'} aria-haspopup="dialog"
           >
             {
               userIsEditingState ?
@@ -226,32 +245,31 @@ function MeetupViewer(props) {
 
         <form
           className={`modal-form ${userIsEditingState ? styleClasses.showContainer : ''}`}
-          onSubmit={handleFormSubmit}
+          onSubmit={handleFormSubmit} aria-label="editar encontro"
         >
           <TextField className={materialClasses.root}
             type="url" label="URL da imagem" inputRef={urlInputRef}
-            fullWidth InputLabelProps={{shrink: true}}
+            fullWidth InputLabelProps={{shrink: true}} inputProps={{'aria-label': 'nova URL da imagem de encontro'}}
           />
           <TextField className={materialClasses.root}
             type="text" label="Título" required inputRef={titleInputRef}
-            fullWidth
+            fullWidth inputProps={{'aria-label': 'novo título'}}
           />
           <TextField className={materialClasses.multiline}
             label="Descrição" rows={4} inputRef={descriptionInputRef}
-            multiline fullWidth InputLabelProps={{shrink: true}}
+            multiline fullWidth InputLabelProps={{shrink: true}} inputProps={{'aria-label': 'nova descrição'}}
           />
-
           <TextField className={materialClasses.root} 
             type="text" label="Endereço" required inputRef={adressInputRef}
-            fullWidth
+            fullWidth inputProps={{'aria-label': 'novo endereço'}}
           />
           <TextField className={materialClasses.root}
             type="time" label="Horário" required format="hh/mm" inputRef={hourInputRef}
-            fullWidth InputLabelProps={{shrink: true}} 
+            fullWidth InputLabelProps={{shrink: true}} inputProps={{'aria-label': 'novo horário'}}
           />
           <TextField className={materialClasses.root}
             type="text" label="Data" required inputRef={dateInputRef}
-            fullWidth
+            fullWidth inputProps={{'aria-label': 'nova data'}}
           />
 
           <div className="action-buttons-wrapper">
@@ -262,7 +280,7 @@ function MeetupViewer(props) {
           </div>
         </form>
       </div>
-    </section>
+    </div>
   )
 }
 
