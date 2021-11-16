@@ -20,7 +20,6 @@ import MeetupCreatorModal from '../components/MeetupCreatorModal';
 function ApplicationCore(props) {
   useEffect(() => changeDataIsLoadingState(true), [])
 
-  const [anchorToGetUnderlinedState, changeAnchorToGetUnderlinedState] = useState('')
   const [meetupsState, changeMeetupsState] = useState([])
   const [confirmModalState, changeConfirmModalState] = useState([false, '', null, '', ''])
   const [meetupViewerState, changeMeetupViewerState] = useState([false])
@@ -47,6 +46,24 @@ function ApplicationCore(props) {
     'auth/web-storage-unsupported': ['seu navegador não suporta armazenamento de dados', 5000],
   }
 
+  useEffect(toggleHideWindowScrollbar, [meetupViewerState, meetupCreatorModalState])
+  useEffect(getUserState, [])
+
+  function toggleHideWindowScrollbar() {
+    const htmlEL = document.querySelector('html')
+
+    if (meetupViewerState[0] || meetupCreatorModalState) {
+      htmlEL.classList.add('overflow-hidden')
+    }
+    else {
+      htmlEL.classList.remove('overflow-hidden')
+    }
+
+    return () => {
+      htmlEL.classList.remove('overflow-hidden')
+    }
+  }
+
   function callErrorMessageHandler(errorCode) {
     const [treatedErrorMessage, duration] =
       firebaseAuthenticationErrors[errorCode] || ['erro inesperado: reinicie a página', 3000]
@@ -69,8 +86,6 @@ function ApplicationCore(props) {
       }
     }, error => callErrorMessageHandler(error.code))
   }
-
-  useEffect(getUserState, [])
   
   function getMeetupsData(user) {
     getDocs(collection(firestoreDatabase, `users/${user.uid}/meetups`))
@@ -101,16 +116,16 @@ function ApplicationCore(props) {
         changeDataIsLoadingState={changeDataIsLoadingState}
         changeFeedbackModalState={changeFeedbackModalState}
       >
-        <Link to="/">
-          <Button size="medium"
+        <Link to="/" tabIndex="-1">
+          <Button size="medium" aria-label="ir para encontros"
             startIcon={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM10 9h8v2h-8zm0 3h4v2h-4zm0-6h8v2h-8z"/></svg>}
           >
             encontros
           </Button>
         </Link>
 
-        <Link to="/favoritos">
-          <Button size="medium"
+        <Link to="/favoritos" tabIndex="-1">
+          <Button size="medium" aria-label="ir apra favoritos"
             startIcon={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>}
           >
             favoritos
@@ -126,7 +141,6 @@ function ApplicationCore(props) {
               meetupsState={meetupsState}
               changeMeetupsState={changeMeetupsState}
               dataIsLoading={dataIsLoading}
-              changeAnchorToGetUnderlinedState={changeAnchorToGetUnderlinedState}
               changeFeedbackModalState={changeFeedbackModalState}
               confirmModalState={confirmModalState}
               changeConfirmModalState={changeConfirmModalState}
@@ -140,11 +154,9 @@ function ApplicationCore(props) {
           <Route path="/favoritos">
             <Bookmarks
               changeDataIsLoadingState={changeDataIsLoadingState}
-              anchorToGetUnderlinedState={anchorToGetUnderlinedState}
               meetupsState={meetupsState}
               changeMeetupsState={changeMeetupsState}
               dataIsLoading={dataIsLoading}
-              changeAnchorToGetUnderlinedState={changeAnchorToGetUnderlinedState}
               changeFeedbackModalState={changeFeedbackModalState}
               confirmModalState={confirmModalState}
               changeConfirmModalState={changeConfirmModalState}
@@ -157,7 +169,7 @@ function ApplicationCore(props) {
         <button
           onClick={() => changeMeetupCreatorModalState(!meetupCreatorModalState)}
           className={`${styleClasses.meetupCreatorButton} ${getModalState() ? styleClasses.hideMeetupCreatorButton : ''}`}
-          aria-label="abrir janela de criação de encontro"
+          aria-label="abrir janela de criação de encontro" aria-haspopup="dialog"
         >
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         </button>
@@ -168,7 +180,6 @@ function ApplicationCore(props) {
         />
 
         <MeetupViewer
-          anchorToGetUnderlinedState={anchorToGetUnderlinedState}
           changeDataIsLoadingState={changeDataIsLoadingState}
           meetupsState={meetupsState}
           changeMeetupsState={changeMeetupsState}
