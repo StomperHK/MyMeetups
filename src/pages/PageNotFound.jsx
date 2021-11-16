@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 import styleClasses from '../scss/PageNotFound.module.scss';
 
 function PageNotFound({changeDataIsLoadingState}) {
-  useEffect(() => changeDataIsLoadingState(false), [])
+  useEffect(() => changeDataIsLoadingState(false), [changeDataIsLoadingState])
 
   const normalTheme = createTheme({
     palette: {
@@ -25,7 +25,7 @@ function PageNotFound({changeDataIsLoadingState}) {
         <div>
           <p>Página não encontrada</p>
           <ThemeProvider theme={normalTheme}>
-            <Link to="/">
+            <Link to="/" tabIndex="-1">
               <Button size="small" fullWidth>
                 voltar ao início
               </Button>
