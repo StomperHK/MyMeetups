@@ -2,10 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 40px;
+  gap: 50px;
 
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 30px;
   max-width: 1100px;
   min-height: calc(100vh - 51px);
 
@@ -13,27 +13,55 @@
 
   @media screen and (max-width: 710px) {
     justify-content: center;
+    padding: 20px 15px;
   }
 
-  @media screen and (max-width: 420px) {
-    padding: 20px 15px;
+}
+
+.noteWrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+
+  margin-bottom: 22px;
+  border: 2px solid var(--blue-color);
+  padding: 6px 8px;
+
+  border-radius: 4px;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--blue-color);
   }
 }
 
-.gridContainerWrapper {
+.flexItemWrapper {
   max-width: 400px;
 
   position: relative;
   z-index: 2;
 
+  .alternativeRocketImage {
+    display: none;
+    margin: 0px auto 14px;
+    width: 160px;
+
+    @media screen and (max-width: 710px) {
+      display: block;
+    }
+  }
+
   h1 {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-size: 30px;
 
     @media screen and (max-width: 420px) {
-      font-size: 24px;
+      font-size: 26px;
     }
   }
 
@@ -41,19 +69,14 @@
     max-width: 400px;
 
     h1 {
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
   }
 }
 
-.gridContainerForForm {
-  display: grid;
-  grid-template-columns: 1fr;
-
+.registerMethodsWrapper {
   border: 2px solid var(--blue-color);
   padding: 12px;
-
-  background-color: var(--content-color-with-high-opacity);
 
   border-radius: 4px;
 
@@ -100,7 +123,7 @@
 
     user-select: none;
 
-    transition: background-color 100ms linear;
+    transition: transform 100ms linear;
 
     svg {
       width: 24px;
@@ -109,7 +132,7 @@
   }
 
   button:active {
-    background-color: rgba(82, 94, 226, 0.2);
+    transform: scale(0.97);
   }
   
   figure {
@@ -147,11 +170,6 @@
   transform: translateY(40px);
 
   @media screen and (max-width: 710px) {
-    width: 200px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: none;
   }
 }
