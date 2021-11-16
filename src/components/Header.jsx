@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
@@ -6,9 +6,11 @@ import styleClasses from '../scss/Header.module.scss';
 import UserProfile from './UserProfile';
 
 function MainHeader(props) {
+  const {auth, currentUser, changeDataIsLoadingState, changeFeedbackModalState} = props
+
   const [hambuguerMenuState, changeHambuguerMenuState] = useState(false)
 
-  const {auth, currentUser, changeDataIsLoadingState, changeFeedbackModalState} = props
+  const hamburgerMenuRef = useRef()
 
   const whiteTheme = createTheme({
     palette: {
@@ -18,11 +20,41 @@ function MainHeader(props) {
     },
   })
 
+  useEffect(toggleHideWindowScrollbar, [hambuguerMenuState])
+  useEffect(manageHideWindowScrollbar, [])
+
+  function toggleHideWindowScrollbar() {
+    const htmlEL = document.querySelector('html')
+    const viewportWidth = document.body.clientWidth
+    const hamburguerMenuIsExpanded =                                                  // To use the hambuguerMenuState to get the current state of the hambuguer menu didn't work
+      hamburgerMenuRef.current.classList.contains(styleClasses.showHamburguerMenu);
+    
+    if (hamburguerMenuIsExpanded && viewportWidth < 501) {
+      htmlEL.classList.add('overflow-hidden')
+    }
+    else {
+      htmlEL.classList.remove('overflow-hidden')
+    }
+  }
+
+  function manageHideWindowScrollbar() {
+    const htmlEL = document.querySelector('html')
+
+    window.addEventListener('resize', toggleHideWindowScrollbar)
+
+    return () => {
+      window.removeEventListener('resize', toggleHideWindowScrollbar)
+      htmlEL.classList.remove('overflow-hidden')
+    }
+  }
+
   return (
     <header className={styleClasses.header}>
       <p className={styleClasses.appName}>MyMeetups</p>
       
-      <nav className={hambuguerMenuState ? styleClasses.showHamburguerMenu : ''}>
+      <nav className={hambuguerMenuState ? styleClasses.showHamburguerMenu : ''}
+        ref={hamburgerMenuRef}
+      >
         <ThemeProvider theme={whiteTheme}>
           {props.children}
         </ThemeProvider>
