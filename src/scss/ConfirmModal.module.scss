@@ -14,8 +14,9 @@
   background-color: var(--backdrop-color);
 
   opacity: 1;
+  visibility: visible;
 
-  transition: opacity 150ms linear;
+  transition: opacity 150ms linear, visibility 0ms 0ms;
 }
 
 .modalContainer {
@@ -82,7 +83,17 @@
   }
 }
 
+@media (pointer: fine) {
+  .firstModalElement:focus {
+    background-color: var(--blue-color-with-small-opacity);
+  }
+}
+
 .disableModal {
   opacity: 0;
+  visibility: hidden;
+
   pointer-events: none;
+
+  transition-delay: 150ms;
 }

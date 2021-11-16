@@ -74,9 +74,17 @@ h1, h2, p, span {
 
   background-color: var(--content-color);
 
+  visibility: hidden;
+
   overflow: auto;
 
-  transition: transform 300ms ease;
+  transition: transform 300ms ease, visibility 0ms 300ms;
+}
+
+@media (pointer: fine) {
+  .first-modal-element:focus {
+    background-color: var(--blue-color-with-small-opacity);
+  }
 }
 
 .modal-header {
@@ -121,6 +129,17 @@ h1, h2, p, span {
       font-size: 21px;
     }
   }
+}
+
+.sticky-header {
+  width: 100%;
+
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+
+  background-color: var(--content-color);
 }
 
 .modal-form {
@@ -206,7 +225,7 @@ h1, h2, p, span {
 }
 
 .MuiIconButton-root.MuiIconButton-root {
-  padding: 5px;
+  padding: 7px;
 }
 
 .MuiInputBase-root {
@@ -239,6 +258,10 @@ h1, h2, p, span {
 
 .modal-activer {
   transform: translateY(0px);
+
+  visibility: visible;
+
+  transition-delay: 0ms;
 }
 
 .overflow-hidden {

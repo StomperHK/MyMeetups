@@ -13,12 +13,19 @@
 
   background-color: var(--content-color);
 
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
   border-radius: 6px;
+
+  transition: opacity 100ms ease, visibility 0ms 100ms;
 }
 
 .loadingBarWrapper {
-  width: 50px;
-  border-radius: 6px;
+  width: 70px;
+  border-radius: 4px;
   overflow: hidden;
 
   span {
@@ -28,10 +35,19 @@
 
     background-color: var(--blue-color);
 
-    border-radius: 6px;
+    border-radius: 4px;
 
     animation: move-from-left-to-right 600ms ease-in-out alternate infinite;
   }
+}
+
+.showLoadingScreen {
+  opacity: 1;
+  visibility: visible;
+
+  pointer-events: initial;
+
+  transition-delay: 0ms;
 }
 
 @keyframes move-from-left-to-right {

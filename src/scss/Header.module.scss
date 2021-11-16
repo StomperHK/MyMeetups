@@ -32,6 +32,7 @@
   @media screen and (min-width: 500.1px) {
     nav {
       transform: none !important;
+      visibility: visible !important;
     }
   }
 
@@ -53,7 +54,9 @@
 
       background-color: var(--blue-color);
 
-      transition: transform 200ms linear;
+      visibility: hidden;
+
+      transition: transform 200ms linear, visibility 0ms 200ms;
 
       & > a  {
         margin-left: 0px;
@@ -106,6 +109,9 @@
 
 .showHamburguerMenu.showHamburguerMenu {
   transform: translateX(-100%);
+  visibility: visible;
+
+  transition-delay: 0ms;
 }
 
 .appName {
