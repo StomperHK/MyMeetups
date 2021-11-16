@@ -1,13 +1,14 @@
 .alternativeActionWrapper {
   display: block;
-  margin: 20vh auto 0px auto;
+  margin: 17vh auto 0px auto;
+  padding-bottom: 85px;
   width: 160px;
 
   color: var(--blue-color);
 
   user-select: none;
 
-  transition: transform 100ms ease;
+  transition: transform 150ms ease;
 
   a {
     text-decoration: none;
@@ -38,6 +39,10 @@
   }
 
   &:active {
-    transform: scale(0.94)
+    transform: scale(0.96)
+  }
+
+  @media screen and (max-height: 580px) {
+    margin-top: 35px;
   }
 }
