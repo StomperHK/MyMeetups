@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {Fragment} from 'react';
 
 import {Link} from 'react-router-dom';
 
@@ -12,15 +12,12 @@ function Bookmarks(props) {
     changeMeetupsState,
     dataIsLoading,
     changeDataIsLoadingState,
-    changeAnchorToGetUnderlinedState,
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
     changeMeetupViewerState,
     currentUser
   } = props
-
-  useEffect(() =>changeAnchorToGetUnderlinedState('second-anchor'), [changeAnchorToGetUnderlinedState])
 
   const bookmarkedMeetups = knowAmountOfBookmarkedMeetups()
 
@@ -83,14 +80,16 @@ function Bookmarks(props) {
   }
 
   return (
-    <article>
-      <div className={`introduction-wrapper ${!bookmarkedMeetups ? 'reduce-padding' : ''}`}>
-        <h1>Favoritos</h1>
-        <p>{bookmarkedMeetups} favorito{bookmarkedMeetups === 1 ? '' : 's'}</p>
-      </div>
+    <Fragment>
+      <section className={`introduction-wrapper ${!bookmarkedMeetups ? 'reduce-padding' : ''}`}
+        aria-labelledby="application-section-name" aria-describedby="application-section-description"
+      >
+        <h1 id="application-section-name">Favoritos</h1>
+        <p id="application-section-description">{bookmarkedMeetups} favorito{bookmarkedMeetups === 1 ? '' : 's'}</p>
+      </section>
 
       {!dataIsLoading && meetupsState ? createCards() : null}
-    </article>
+    </Fragment>
   )
 }
 

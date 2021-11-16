@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {Fragment} from 'react';
 
 import styleClasses from '../scss/ApplicationCore.module.scss';
 import Card from '../components/Card';
@@ -10,7 +10,6 @@ function Meetups(props) {
     changeMeetupsState,
     dataIsLoading,
     changeDataIsLoadingState,
-    changeAnchorToGetUnderlinedState,
     changeFeedbackModalState,
     confirmModalState,
     changeConfirmModalState,
@@ -19,8 +18,6 @@ function Meetups(props) {
     changeMeetupCreatorModalState,
     currentUser
   } = props
-  
-  useEffect(() => changeAnchorToGetUnderlinedState('first-anchor'), [changeAnchorToGetUnderlinedState])
 
   function returnCards()  {
     return (
@@ -53,7 +50,7 @@ function Meetups(props) {
 
   function createCards() {
     return meetupsState.length ?
-    returnCards() : 
+    returnCards() :
     (
       <AlternativeAction>
         <button className='createMeetupWrapper' 
@@ -72,14 +69,16 @@ function Meetups(props) {
   }
 
   return (
-    <article>
-      <div className={`introduction-wrapper ${!meetupsState.length ? 'reduce-padding' : ''}`}>
-        <h1>Encontros</h1>
-        <p>{meetupsState.length} encontro{meetupsState.length === 1 ? '' : 's'}</p>
-      </div>
+    <Fragment>
+      <section className={`introduction-wrapper ${!meetupsState.length ? 'reduce-padding' : ''}`}
+        aria-labelledby="application-section-name" aria-describedby="application-section-description"
+      >
+        <h1 id="application-section-name">Encontros</h1>
+        <p id="application-section-description">{meetupsState.length} encontro{meetupsState.length === 1 ? '' : 's'}</p>
+      </section>
 
       {!dataIsLoading ? createCards() : null}
-    </article>
+    </Fragment>
   )
 }
 
