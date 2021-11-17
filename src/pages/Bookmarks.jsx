@@ -19,13 +19,13 @@ function Bookmarks(props) {
     currentUser
   } = props
 
-  const bookmarkedMeetups = knowAmountOfBookmarkedMeetups()
+  const bookmarkedMeetups = toKnowTheAmountOfBookmarkedMeetups()
 
-  function knowIfAnyMeetupIsBookmarked() {
+  function toKnowIfAnyMeetupIsBookmarked() {
     return meetupsState.some(meetup => meetup.isBookmarked)
   }
 
-  function knowAmountOfBookmarkedMeetups() {
+  function toKnowTheAmountOfBookmarkedMeetups() {
     return meetupsState.reduce((accum, meetup) => meetup.isBookmarked ? accum + 1 : accum, 0)
   }
 
@@ -63,7 +63,7 @@ function Bookmarks(props) {
   }
 
   function createCards() {
-    return knowIfAnyMeetupIsBookmarked() ?
+    return toKnowIfAnyMeetupIsBookmarked() ?
     returnCards() :
     (
       <AlternativeAction>

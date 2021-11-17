@@ -91,7 +91,7 @@ function Card(props) {
   }
 
   function callMeeetupViewer() {
-    changeMeetupViewerState([true, cardIndex, callConfirmModal, toggleBookmarkMeetup])
+    changeMeetupViewerState([true, cardIndex, callConfirmModal])
   }
 
   function updateFrontEndOnBookmark() {

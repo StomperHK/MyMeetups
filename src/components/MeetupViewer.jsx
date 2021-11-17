@@ -3,8 +3,6 @@ import {useRef, useState, useEffect} from 'react';
 import {firestoreDatabase} from '../firebase';
 import {updateDoc, doc} from 'firebase/firestore';
 
-import {useLocation} from 'react-router-dom';
-
 import Button from '@mui/material/Button';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
@@ -28,10 +26,9 @@ function MeetupViewer(props) {
     currentUser
   } = props
 
-  const [modalIsActivated, cardIndex, callConfirmModal, toggleBookmarkMeetup] = meetupViewerState
+  const [modalIsActivated, cardIndex, callConfirmModal] = meetupViewerState
 
   const [userIsEditingState, changeUserIsEditingState] = useState(false)
-  const [viewerBookmarkState, changeViewerBookmarkState] = useState(false)
 
   const firstModalElementRef = useRef()
   const urlInputRef = useRef()
@@ -42,11 +39,8 @@ function MeetupViewer(props) {
   const dateInputRef = useRef()
 
   useEffect(focusFirstModalElement, [meetupViewerState])
-  useEffect(() => changeViewerBookmarkState(cardIndex !== undefined && meetupsState[cardIndex] ? meetupsState[cardIndex].isBookmarked : false), [meetupsState, cardIndex, meetupViewerState])
   useEffect(updateInputs, [meetupsState, cardIndex])
   useEffect(verifyModalChange, [confirmModalState, changeConfirmModalState])
-
-  const pathname = useLocation().pathname
 
   const normalTheme = createTheme({
     palette: {
@@ -87,17 +81,6 @@ function MeetupViewer(props) {
     if (confirmModalState[1] === 'edit') {
       changeConfirmModalState([false, '', null, '', ''])
       updateDatabaseData()
-    }
-  }
-
-  function changeMeetupBookmark() {
-    const meetupIsBookmarked = meetupsState[cardIndex].isBookmarked
-    meetupsState[cardIndex].isBookmarked = !meetupIsBookmarked
-    toggleBookmarkMeetup()
-    changeViewerBookmarkState(!viewerBookmarkState)
-
-    if (pathname === 'favoritos') {
-      setTimeout(() => changeMeetupViewerState([false]), 250)
     }
   }
 
@@ -217,15 +200,6 @@ function MeetupViewer(props) {
             aria-label="excluir encontro" aria-haspopup="dialog"
             >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
-          </button>
-          <button onClick={changeMeetupBookmark} 
-            aria-label="favoritar encontro" aria-haspopup="dialog"
-          >
-            {
-              cardIndex !== undefined && viewerBookmarkState ?
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg> :
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
-            }
           </button>
           <button className={userIsEditingState ? styleClasses.blueBackgroundColor : ''}
             onClick={handleEditButtonClick}
