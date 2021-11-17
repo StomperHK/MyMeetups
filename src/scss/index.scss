@@ -160,12 +160,7 @@ h1, h2, p, span {
   justify-content: space-between;
   gap: 10px;
 
-  margin-top: 20px;
-
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 10vh;
 
   padding: 0px 10px;
   width: 100%;
@@ -175,11 +170,8 @@ h1, h2, p, span {
     width: 100%;
   }
 
-  @media screen and (max-height: 530px) {
-    position: static;
-    bottom: initial;
-    left: initial;
-    transform: none;
+  @media screen and (max-height: 580px) {
+    margin-top: 20px;
   }
 }
 
