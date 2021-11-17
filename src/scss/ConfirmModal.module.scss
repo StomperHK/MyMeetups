@@ -16,7 +16,7 @@
   opacity: 1;
   visibility: visible;
 
-  transition: opacity 150ms linear, visibility 0ms 0ms;
+  transition: opacity 150ms linear, visibility 150ms;
 }
 
 .modalContainer {
@@ -94,6 +94,4 @@
   visibility: hidden;
 
   pointer-events: none;
-
-  transition-delay: 150ms;
 }
