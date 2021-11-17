@@ -46,23 +46,7 @@ function ApplicationCore(props) {
     'auth/web-storage-unsupported': ['seu navegador não suporta armazenamento de dados', 5000],
   }
 
-  useEffect(toggleHideWindowScrollbar, [meetupViewerState, meetupCreatorModalState])
   useEffect(getUserState, [])
-
-  function toggleHideWindowScrollbar() {
-    const htmlEL = document.querySelector('html')
-
-    if (meetupViewerState[0] || meetupCreatorModalState) {
-      htmlEL.classList.add('overflow-hidden')
-    }
-    else {
-      htmlEL.classList.remove('overflow-hidden')
-    }
-
-    return () => {
-      htmlEL.classList.remove('overflow-hidden')
-    }
-  }
 
   function callErrorMessageHandler(errorCode) {
     const [treatedErrorMessage, duration] =
